@@ -70,9 +70,9 @@ It is important to note that for snapshot endpoints, the absence of an item in t
 
 Please consider these additional edge cases related to PMS resources when refining your integration logic.
 
-**Scenario: Managing PMS practitioners with multiple specialties**
-**Given** the potential for a single practitioner to possess multiple specialties within a PMS
-**When** sending a PMS resource snapshot to Healthengine
+**Scenario: Managing PMS practitioners with multiple specialties**  
+**Given** the potential for a single practitioner to possess multiple specialties within a PMS  
+**When** sending a PMS resource snapshot to Healthengine  
 **Then** distinct PMS resources should be sent for each practitioner/specialty combination
 
 ---
@@ -83,7 +83,7 @@ Managing incoming requests from Healthengine is of utmost importance. Swift hand
 
 Certain types of requests hold a higher priority in terms of integration health. Failure to address these critical requests within a ten minute window during the operational hours of the integration outlined in the liveness contract will result in the integration being marked as unhealthy. Consequently, the practice's appointments will be removed from publication.
 
-**Scenario: Polling for new requests**
+**Scenario: Polling for new requests**  
 **Given** an integrated PMS account or location  
 **When** within the hours of the liveness contract  
 **Then** regular polling of the requests endpoint for new requests from Healthengine should be performed
@@ -112,8 +112,8 @@ We strongly advise that you continue to periodically check the requests endpoint
 **Then** receipt should be acknowledged within three attempts to avoid the request being missed
 
 **Scenario: Handling missed webhook payloads**  
-**Given** that a webhook subscription has been established for a specific request type 
-**When** a webhook payload is missed because the maximum number of unacknowledged requests is reached
+**Given** that a webhook subscription has been established for a specific request type  
+**When** a webhook payload is missed because the maximum number of unacknowledged requests is reached  
 **Then** regular polling of the requests endpoint should be employed to capture any missed requests
 
 ---
@@ -127,7 +127,7 @@ Please consider these additional edge cases related to booking requests when ref
 **When** polling the PMS API for new requests  
 **Then** the integration should prioritise the processing of booking requests to prevent processing request types that depend on the existence of a booking
 
-**Scenario: Handling an unknown booking ID for incoming booking-related requests**
-**Given** the integration has recently been set up for a PMS account or location
-**When** an incoming booking-related request contains a booking ID that is unrecognised by the PMS
+**Scenario: Handling an unknown booking ID for incoming booking-related requests**  
+**Given** the integration has recently been set up for a PMS account or location  
+**When** an incoming booking-related request contains a booking ID that is unrecognised by the PMS  
 **Then** the request should be rejected to maintain the overall health and integrity of the integration
