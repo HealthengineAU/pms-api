@@ -1,0 +1,2585 @@
+openapi: 3.0.1
+
+info:
+  title: Healthengine PMS API
+  description: An API to allow an external agent to publish information to Healthengine
+    in order to allow booking of appointments.
+  contact:
+    email: integrations@healthengine.com.au
+  version: 1.6.0
+
+servers:
+- url: https://healthengine.com.au/pms-api/v1
+
+tags:
+- name: requests
+  description: Operations requested from Healthengine
+- name: bookings
+  description: Operations on Healthengine bookings
+- name: availability
+  description: Operations to add availability to Healthengine that can be booked
+- name: configuration
+  description: Operations to setup PMS resources, PMS appointment types, ... to Healthengine
+- name: features
+  description: Operations to enable/disable extra features that are supported/unsupported at your end
+- name: subscriptions
+  description: Operations to manage Healthengine subscriptions
+- name: subscription error logs
+  description: Operations to retrieve error logs created during subscription callback
+- name: documents
+  description: Operations to add documents to Healthengine bookings
+- name: client snapshots
+  description: Operations to send client snapshots to Healthengine
+- name: attach documents
+  description: Operations to get document content and confirm or reject document insert into the PMS
+
+paths:
+  # paths: requests
+  /requests:
+    get:
+      tags:
+      - requests
+      summary: Get outstanding requests
+      description: >
+        Gets a list of requests to retrieve from the Healthengine API. You should do this on a timer.
+        We expect that if you are polling us that the integration is healthy, and can actively process requests or upload availability.
+        If your poll is more than 10 minutes apart (outside of the liveness contract) we may consider the integration unhealthy,
+        and hide the patient's ability to make bookings with the specified practice.
+      operationId: pollRequests
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/bookings:
+    get:
+      tags:
+      - requests
+      summary: Get booking requests
+      description: Get pending bookings that should be inserted into the PMS
+      operationId: bookingRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Booking'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/bookingUpdates:
+    get:
+      tags:
+      - requests
+      summary: Get booking update requests
+      description: >
+        Get the changes to existing bookings that should be updated into the PMS.
+        This include pending cancellations.
+      operationId: bookingUpdateRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BookingUpdate'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/availability:
+    get:
+      tags:
+      - requests
+      summary: Get availability requests
+      description: >
+        Get dates that Healthengine wants to refresh available appointments for.
+        This request should only happen in specific cases.
+        You should not rely **only** on these requests to send availability snapshots.
+        The normal workflow is to send availability snapshots as soon as availability has changed in the PMS.
+      operationId: availabilitySnapshotRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Requested days to sync to Healthengine
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AvailabilityRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/pmsAppointmentChanges:
+    get:
+      tags:
+      - requests
+      summary: Get PMS appointment change requests
+      description: >
+        Get booking ids that Healthengine wants to refresh PMS appointment changes for.
+        This request should only happen in specific cases.
+        You should not rely **only** on these requests to send appointment changes.
+        The normal workflow is to send appointment changes as soon as the appointment has changed in the PMS.
+      operationId: pmsAppointmentChangeRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Requested appointment changes that should be sent to Healthengine according to a list of bookingId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PmsAppointmentChangesRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/availableDocuments:
+    get:
+      tags:
+      - requests
+      summary: Get available document requests
+      description: >
+        [Extra Feature: documents]
+        You will only receive these requests when documents feature is supported and enabled at your end.
+        Get booking ids that Healthengine wants to refresh list of available documents.
+        The normal workflow is to send list of available documents as soon as new documents are available for a booking (scripts, referral, ...).
+        This request is specifically included to support reconciliation and as a backup for dropped messages.
+      operationId: availableDocumentsRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Requested list of available documents that should be sent to Healthengine according to a list of bookingId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AvailableDocumentsRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/uploadDocuments:
+    get:
+      tags:
+      - requests
+      summary: Get upload document requests
+      description: >
+        [Extra Feature: documents]
+        You will only receive these requests when documents feature is supported and enabled at your end.
+        Get document ids that need to be uploaded to Healthengine.
+        Documents will only be requested if patient gives consent.
+      operationId: uploadDocumentsRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Requested list of documents that should be uploaded to Healthengine according to a list of pmsDocumentId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UploadDocumentsRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/clientSnapshots:
+    get:
+      tags:
+      - requests
+      summary: Get client snapshot dates that Healthengine needs.
+      description: >
+        [Extra Feature: clientSnapshots]
+        You will only receive these requests when clientSnapshots feature is supported and enabled at your end.
+        These client snapshots will be requested for practices having products that need appointment and patient details from your PMS.
+        These products are: Appointment Reminders, Patient Feedback, Patient Waiting Room, Patient Check-Ins, New Patient Forms and more to come.
+        If you don't provide these client snapshots, practices will be unable to use these products.
+      operationId: clientSnapshotsRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Requested days to sync to Healthengine
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ClientSnapshotRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /requests/attachDocuments:
+    get:
+      tags:
+      - requests
+      summary: Get attach document requests
+      description: >
+        [Extra Feature: attachDocuments]
+        You will only receive these requests when attachDocuments feature is supported and enabled at your end.
+        Get pending documents (from Healthengine) to be inserted and attached to patient in the PMS, so it is available for PMS users.
+        These documents are provided by the patient for products such as New Patient Forms, Pre-Screening Form, Referrals, and more to come.
+        Document content is not included in this list of documents.
+        To get document content, please call attachDocuments/{requestId} GET endpoint.
+        To confirm or reject insert, please call attachDocuments/{requestId}/confirmInsert or attachDocuments/{requestId}/rejectInsert POST endpoint.
+      operationId: attachDocumentRequests
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AttachDocumentRequest'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # paths: bookings
+  /bookings/{bookingId}/confirmInsert:
+    post:
+      tags:
+      - bookings
+      summary: Confirm booking insert into the PMS
+      description: >
+        This will remove it from the list of pending booking requests and mark it on Healthengine as successful.
+      operationId: confirmBookingInsert
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmBookingInsert'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/rejectInsert:
+    post:
+      tags:
+      - bookings
+      summary: Reject booking insert into the PMS
+      description: >
+        This will remove the booking from the pending booking requests on Healthengine and mark it as failed,
+        resulting in the patient being presented with a new list of times to choose from. If a booking is not rejected
+        within 20 seconds of being created, it will progress to confirmed and the practice will have to cancel it manually.
+      operationId: rejectBookingInsert
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectBookingInsert'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/confirmUpdate/{requestId}:
+    post:
+      tags:
+      - bookings
+      summary: Confirm booking update into the PMS
+      description: Confirm the requested change to the booking has been handled into the PMS
+      operationId: confirmBookingUpdate
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/rejectUpdate/{requestId}:
+    post:
+      tags:
+      - bookings
+      summary: Reject booking update into the PMS
+      description: Reject the requested change to the booking into the PMS
+      operationId: rejectBookingUpdate
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectBookingUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/cancel:
+    post:
+      tags:
+      - bookings
+      summary: Cancel Healthengine booking
+      description: Cancel Healthengine booking when booking has been cancelled by the PMS
+      operationId: cancelBooking
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelBooking'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/didNotAttend:
+    post:
+      tags:
+      - bookings
+      summary: Inform Healthengine patient DNA
+      description: Inform Healthengine that patient did not attend the appointment
+      operationId: didNotAttend
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DidNotAttendBooking'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /bookings/{bookingId}/noPmsAppointmentChange:
+    post:
+      tags:
+      - bookings
+      summary: Confirm no change in response to update request
+      description: >
+        Call this endpoint when a pmsAppointmentChanges request is received but there is no change (no cancellation, no did not attend) since booking insertion in PMS.
+      operationId: noPmsAppointmentChange
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # paths: availability
+  /availability/snapshot:
+    post:
+      tags:
+      - availability
+      summary: Upload availability snapshot
+      description: >
+        Upload snapshot of availability for a resource/practitioner for a day.
+        The normal workflow is to send availability snapshots as soon as availability changed into the PMS.
+      operationId: sendAvailabilitySnapshot
+      requestBody:
+        description: Availability snapshot that describes a resource/practitioner for a day
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilitySnapshot'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # paths: configuration
+  /config/pmsResources/findById:
+    get:
+      tags:
+      - configuration
+      summary: Get PMS resource
+      description: Get a PMS resource/practitioner uploaded to Healthengine
+      operationId: findByPmsResourceId
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmsResource'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/pmsResources:
+    get:
+      tags:
+      - configuration
+      summary: Get all PMS resources
+      description: Get all PMS resources/practitioners uploaded to Healthengine
+      operationId: getResources
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmsResource'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/pmsResources/snapshot:
+    post:
+      tags:
+      - configuration
+      summary: Upload PMS resources snapshot
+      description: Upload a snapshot of supported PMS resources/practitioners
+      operationId: uploadPmsResources
+      requestBody:
+        description: Upload the list of resources/practitioners
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PmsResource'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/pmsAppointmentTypes/findById:
+    get:
+      tags:
+      - configuration
+      summary: Get PMS appointment type
+      description: Get a PMS appointment type uploaded to Healthengine
+      operationId: findByPmsAppointmentTypeId
+      parameters:
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmsAppointmentType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/pmsAppointmentTypes:
+    get:
+      tags:
+      - configuration
+      summary: Get all PMS appointment types
+      description: Get all PMS appointment types uploaded to Healthengine
+      operationId: getPmsAppointmentTypes
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmsAppointmentType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/pmsAppointmentTypes/snapshot:
+    post:
+      tags:
+      - configuration
+      summary: Upload PMS appointment types snapshot 
+      description: Upload a snapshot of supported PMS appointment types
+      operationId: uploadPmsAppointmentTypes
+      requestBody:
+        description: Upload the list of supported PMS Appointment Types
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PmsAppointmentType'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /config/livenessContract:
+    get:
+      tags:
+      - configuration
+      summary: Get liveness contract
+      description: Get the current liveness contract
+      operationId: getLivenessContract
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessContract'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+      - configuration
+      summary: Create or replace liveness contract
+      description: >
+        On Healthengine we hide bookable times if the integration is deemed to be down.
+        In a scenario where we are interacting with a cloud vendor we receive updates often enough to mean we dont take bookings down.
+        However, if your integration is on-site and the machine the integration is running on may be shut down at night,
+        you may specify a liveness contract. In the times specified we will only deem your integration to be alive if
+        you are sending updates.
+        e.g. from 8am to 5am, maybe we should make appointments unbookable if we can't connect because it will cause mid air collisions once connection is re-established.
+      operationId: uploadLivenessContract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivenessContract'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # paths: features
+  /features:
+    get:
+      tags:
+      - features
+      summary: Get all features
+      description: >
+        Get all extra features available (documents, clientSnapshots, attachDocuments, and more to come).
+        Features are disabled by default and must only be enabled when they are fully supported at your end (see: POST features/{id}/enable).
+        This gives us the flexibility to add and deploy new features at our end without changing PMS API behaviour (e.g. sending new requests to you) until you support some or all of them.
+      operationId: getFeatures
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /features/{id}:
+    get:
+      tags:
+      - features
+      summary: Get feature
+      operationId: getFeature
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /features/{id}/enable:
+    post:
+      tags:
+      - features
+      summary: Enable feature
+      description: >
+        Enable extra feature when it is fully supported at your end.
+        Please note when extra feature is enabled, you must handle related requests in reasonable time
+        or we may consider you unhealthy and hide appts / disable products at our end until you process pending requests.
+      operationId: enableFeature
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /features/{id}/disable:
+    post:
+      tags:
+      - features
+      summary: Disable feature
+      description: >
+        Disable extra feature when it is no longer supported at your end.
+      operationId: disableFeature
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # paths: subscriptions
+  /subscription:
+    get:
+      tags:
+      - subscriptions
+      summary: Get all subscriptions
+      description: Get all current subscriptions
+      operationId: getSubscriptions
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+      - subscriptions
+      summary: Create or update subscription
+      description: Create or update a subscription
+      operationId: createSubscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subscription'
+        required: true
+      responses:
+        '201':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+      callbacks:
+        requests.bookings:
+          requests.bookings:
+            post:
+              summary: requests.bookings (for acceptance or rejection)
+              description: >
+                  This callback is called in response to there being 1 or more bookings waiting for acceptance or rejection.
+                  If you don't accept or reject within 20 seconds, the bookings will be optimistically presumed accepted and
+                  it will be up to the practice to manually enter them in the PMS.
+                  You must still ensure you call confirm or reject for all bookings requested as failure to do so may result
+                  in the integration being marked unhealthy which will hide all appointment times for the specified practice.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.bookings
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/bookings
+                              description: The endpoint you should call to retrieve all requested (and not handled) bookings.
+                            requestType:
+                              type: string
+                              example: bookings
+                              description: The endpoint category name.
+                            bookingId:
+                              type: integer
+                              format: int64
+                              example: 123
+                              description: The booking id that triggered this callback.
+              responses: # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.bookingUpdates:
+          requests.bookingUpdates:
+            post:
+              summary: requests.bookingUpdates (cancellation)
+              description: >
+                  This callback is called in response to there being 1 or more bookings that have been updated.
+                  An update to a booking is almost always a cancellation of that booking, but may be an update of other details.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.bookingUpdates
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/bookingUpdates
+                              description: The endpoint you should call to retrieve all requested (and not handled) booking updates.
+                            requestType:
+                              type: string
+                              example: bookingUpdates
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+                            bookingId:
+                              type: integer
+                              format: int64
+                              example: 123
+                              description: The booking id that triggered this callback.
+              responses: # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.availability:
+          requests.availability:
+            post:
+              summary: requests.availability (availability refresh)
+              description: >
+                  This callback is called to indicate there are one or more days of availability required by Healthengine.
+                  Call the requests/availability GET endpoint for details.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.availability
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/availability
+                              description: The endpoint you should call to get days of availability required.
+                            requestType:
+                              type: string
+                              example: availability
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+              responses: # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.pmsAppointmentChanges:
+          requests.pmsAppointmentChanges:
+            post:
+              summary: requests.pmsAppointmentChanges
+              description: >
+                  This callback is not currently called. But, it would be used to indicate that Healthengine requires updated appointment details.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.pmsAppointmentChanges
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/pmsAppointmentChanges
+                              description: The endpoint you should call to retrieve a list of appointment changes that indicate which bookingId(s) require updates.
+                            requestType:
+                              type: string
+                              example: pmsAppointmentChanges
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+                            bookingId:
+                              type: integer
+                              format: int64
+                              example: 123
+                              description: The booking id that triggered this callback.
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.pmsResources:
+          requests.pmsResources:
+            post:
+              summary: requests.pmsResources
+              description: >
+                  This callback is called to indicate PMS resources are required by Healthengine.
+                  Call the config/pmsResources/snapshot POST endpoint to send PMS resources snapshot to Healthengine.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.pmsResources
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: null
+                              description: There is no endpoint to call for more details.
+                            requestType:
+                              type: string
+                              example: pmsResources
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.pmsAppointmentTypes:
+          requests.pmsAppointmentTypes:
+            post:
+              summary: requests.pmsAppointmentTypes
+              description: >
+                  This callback indicates that pms appointment types are required by Healthengine.
+                  Call the config/pmsAppointmentTypes/snapshot POST endpoint to send the snapshot to Healthengine.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.pmsAppointmentTypes
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: null
+                              description: There is no endpoint to call for more details.
+                            requestType:
+                              type: string
+                              example: pmsAppointmentTypes
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.availableDocuments:
+          requests.availableDocuments:
+            post:
+              summary: requests.availableDocuments
+              description: >
+                  [Extra Feature: documents]
+                  You will only receive these requests when documents feature is supported and enabled at your end.
+                  Call the requests/availableDocuments GET endpoint for details.
+                  This callback is not currently called.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.availableDocuments
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/availableDocuments
+                              description: The endpoint you should call to retrieve a list of bookings with available documents.
+                            requestType:
+                              type: string
+                              example: availableDocuments
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+                            bookingId:
+                              type: integer
+                              format: int64
+                              example: 123
+                              description: The booking id that triggered this callback.
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.uploadDocuments:
+          requests.uploadDocuments:
+            post:
+              summary: requests.uploadDocuments
+              description: >
+                  [Extra Feature: documents]
+                  You will only receive these requests when documents feature is supported and enabled at your end.
+                  Call the requests/uploadDocuments GET endpoint for details.
+                  This callback is not currently called.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.uploadDocuments
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/uploadDocuments
+                              description: The endpoint you should call to retrieve a list of bookings for which Healthengine requires you to upload a document (previously uploaded).
+                            requestType:
+                              type: string
+                              example: uploadDocuments
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+                            bookingId:
+                              type: integer
+                              format: int64
+                              example: 123
+                              description: The booking id that triggered this callback.
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.clientSnapshots:
+          requests.clientSnapshots:
+            post:
+              summary: requests.clientSnapshots
+              description: >
+                  [Extra Feature: clientSnapshots]
+                  You will only receive these requests when clientSnapshots feature is supported and enabled at your end.
+                  This callback is called to indicate there are one or more client snapshot dates required by Healthengine.
+                  Call the requests/clientSnapshots GET endpoint for details.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.clientSnapshots
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/clientSnapshots
+                              description: The endpoint you should call to get days of clientSnapshot required.
+                            requestType:
+                              type: string
+                              example: clientSnapshots
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+        requests.attachDocuments:
+          requests.attachDocuments:
+            post:
+              summary: requests.attachDocuments
+              description: >
+                  [Extra Feature: attachDocuments]
+                  You will only receive these requests when attachDocuments feature is supported and enabled at your end.
+                  This callback is called to indicate there are one or more pending documents (from Healthengine) to be inserted into the PMS.
+                  Call the requests/attachDocuments GET endpoint for details.
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        timestamp:
+                          type: string
+                          format: datetime
+                          example: 2020-12-05 01:13:55
+                          description: The date and time of when this callback was made.
+                        id:
+                          type: string
+                          example: db26bebd-63f3-47d6-9fb8-09b4edc38aa7
+                          description: The id of the subscription. Useful for cancelling or updating.
+                        clientId:
+                          type: string
+                          nullable: true
+                          example: null
+                          description: The same clientId you provided when subscribing.
+                        topic:
+                          type: string
+                          example: requests.attachDocuments
+                          description: The subscription topic you subscribed to for this event.
+                        data:
+                          type: object
+                          properties:
+                            target:
+                              type: string
+                              example: /requests/attachDocuments
+                              description: The endpoint you should call to get pending documents (from Healthengine) to be inserted into the PMS.
+                            requestType:
+                              type: string
+                              example: attachDocuments
+                              description: The endpoint category name.
+                            requestId:
+                              type: integer
+                              format: int64
+                              example: 312
+                              description: The id of the sync request that triggered this callback
+              responses:   # Expected responses to the callback message
+                '200':
+                  description: Your server returns this code if it accepts the callback
+  /subscription/{id}:
+    get:
+      tags:
+      - subscriptions
+      summary: Get a subscription
+      description: Get a subscription
+      operationId: getSubscription
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      tags:
+      - subscriptions
+      summary: Delete a subscription
+      operationId: deleteSubscription
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Successful
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /subscriptionErrorLog:
+    get:
+      tags:
+      - subscription error logs
+      summary: Get subscription error logs
+      description: Get subscription error logs
+      operationId: getSubscriptionErrorLogs
+      parameters:
+        - in: query
+          name: subscriptionId
+          schema:
+            type: string
+          description: The id of the subscription to get the logs for
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int64
+          description: The page to request
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubscriptionErrorLog'
+                  page:
+                    $ref: '#/components/schemas/Paginated'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # paths: documents
+  /documents/available:
+    post:
+      tags:
+      - documents
+      summary: Send list of available documents
+      description: >
+        [Extra Feature: documents]
+        Send a list of available documents related to bookings (only metadata, no content).
+      operationId: availableDocuments
+      requestBody:
+        description: List of available documents related to bookings.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentMetadata'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+  /documents/upload:
+    post:
+      tags:
+      - documents
+      summary: Upload document for a booking
+      description: >
+        [Extra Feature: documents]
+        Upload a document related to a booking (metadata and content).
+      operationId: uploadDocument
+      requestBody:
+        description: Document for related booking.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+  /documents/rejectUpload:
+    post:
+      tags:
+      - documents
+      summary: Reject requested document upload
+      description: >
+        [Extra Feature: documents]
+        Reject the requested upload of document related to a booking (metadata and content).
+      operationId: rejectUploadDocument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectDocumentUpload'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # paths: client snapshot
+  /clientSnapshot:
+    post:
+      tags:
+      - client snapshots
+      summary: Send client snapshot for snapshot date and type
+      description: >
+        [Extra Feature: clientSnapshots]
+        A client snapshot should contain all appointments and related patients only for requested snapshot date.
+        According to snapshot date type (appt_datetime or appt_creation_datetime), you should return all appointments where appointment date or appointment creation date matches requested snapshot date.
+        It is important to always return a complete list of locations, practitioners and appointment types regardless of snapshot date requested otherwise missing ones would be marked as deleted at our end and could cause unwanted side effects in product settings for practice.
+      operationId: sendClientSnapshot
+      requestBody:
+        description: Client snapshot for snapshot date and type
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientSnapshot'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  # paths: attachDocuments
+  /attachDocuments/{requestId}:
+    get:
+      tags:
+      - attach documents
+      summary: Get document with metadata and content
+      description: >
+        [Extra Feature: attachDocuments]
+        Get pending document (from Healthengine) with metadata and content for request id.
+      operationId: getAttachDocument
+      parameters:
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttachDocument'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '410':
+          $ref: '#/components/responses/GoneError'
+  /attachDocuments/{requestId}/confirmInsert:
+    post:
+      tags:
+      - attach documents
+      summary: Confirm document insert into the PMS
+      description: >
+        [Extra Feature: attachDocuments]
+        Confirm the pending document (from Healthengine) has been inserted and attached to patient into the PMS.
+      operationId: confirmAttachDocument
+      parameters:
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmAttachDocument'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '410':
+          $ref: '#/components/responses/GoneError'
+  /attachDocuments/{requestId}/rejectInsert:
+    post:
+      tags:
+      - attach documents
+      summary: Reject document insert into the PMS
+      description: >
+        [Extra Feature: attachDocuments]
+        Reject the pending document (from Healthengine) to be inserted and attached to patient into the PMS.
+      operationId: rejectAttachDocument
+      parameters:
+      - name: requestId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RejectAttachDocument'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '410':
+          $ref: '#/components/responses/GoneError'
+
+components:
+  schemas:
+    # schemas: shared
+    Paginated:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        perPage:
+          type: integer
+          format: int64
+        total:
+          type: integer
+          format: int64
+
+    # schemas: requests
+    Request:
+      type: string
+      enum:
+      - bookings
+      - bookingUpdates
+      - availability
+      - pmsAppointmentChanges
+      - pmsResources
+      - pmsAppointmentTypes
+      - availableDocuments
+      - uploadDocuments
+      - clientSnapshots
+      - attachDocuments
+    AvailabilityRequest:
+      type: object
+      properties:
+        day:
+          type: string
+          format: date
+          description: Day to sync availability for (YYYY-MM-DD)
+        pms_resource_id:
+          type: string
+          description: Deprecated. Use pmsResourceId.
+        pmsResourceId:
+          type: string
+          description: Specific PMS resource to sync availability for (optional)
+    PmsAppointmentChangesRequest:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+        pmsPatientId:
+          type: string
+    AvailableDocumentsRequest:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+        pmsPatientId:
+          type: string
+    UploadDocumentsRequest:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+        pmsPatientId:
+          type: string
+        pmsDocumentId:
+          type: string
+    ClientSnapshotRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Requested snapshot date to send client snapshot for (YYYY-MM-DD at practice timezone)
+        dateType:
+          type: string
+          description: >
+            Requested snapshot date type.
+            For appt_datetime, you should return all appointments where appointment date matches requested snapshot date.
+            For appt_creation_datetime, you should return all appointments where appointment creation date (or booking date) matches requested snapshot date.
+          enum:
+          - appt_datetime
+          - appt_creation_datetime
+    AttachDocumentRequest:
+      allOf:
+      - type: object
+        properties:
+          requestId:
+            type: integer
+            format: int64
+            description: A unique identifier of the request that is sequential in relation to other requests
+      - $ref: '#/components/schemas/AttachDocumentMetadata'
+
+    # schemas: bookings
+    ConfirmBookingInsert:
+      required:
+        - pmsAppointmentIds
+        - pmsPatientId
+      type: object
+      properties:
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+        pmsPatientId:
+          type: string
+        patientAppointmentLink:
+          description: An optional appointment URL/Link for the case where you are confirming a telehealth appointment, if the url is not set no URL will be given to the patient, and this responsibility will fall on the vendor to fulfill.
+          type: string
+        patientAppointmentDescription:
+          description: An optional description to accompany the link given if the link is non-standard or there are extra instructions / passwords that must be given to the patient that is appointment specific. This is not for practice level communications and should only be for things unique to this appointment.
+          type: string
+        practitionerAppointmentLink:
+          description: An optional appointment URL/Link for the case where you are confirming a telehealth appointment, if the url is not set no URL will be given to the practitioner, and this responsibility will fall on the vendor to fulfill.
+          type: string
+        practitionerAppointmentDescription:
+          description: An optional description to accompany the link given if the link is non-standard or there are extra instructions / passwords that must be given to the practitioner that is appointment specific. This is not for practice level communications and should only be for things unique to this appointment.
+          type: string
+      example:
+        WhatsAppAppointment:
+          summary: Telehealth Appointment with Whats App
+          value:
+            pmsAppointmentIds: [12384]
+            pmsPatientId: "919823be-95b8-403d-82b1-cfedb8c93285"
+            patientAppointmentLink: "https://wa.me/15551234567"
+            patientAppointmentDescription: "You will need WhatsApp to attend your booking; visit https://www.whatsapp.com/download"
+            practitionerAppointmentLink: "https://healthengine.com.au/video/123456"
+            practitionerAppointmentDescription: "Use your existing credentials to login to the portal and start the appointment"
+    RejectBookingInsert:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+    RejectBookingUpdate:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+    CancelBooking:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+    DidNotAttendBooking:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+    Booking:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+        pmsResourceId:
+          type: string
+          description: May be null if a booking is made for a PMS Resource that is then removed before the booking is processed. Reject booking if this is null.
+        pmsAppointmentTypeId:
+          type: string
+          description: can be null
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+          description: can be empty array
+        pmsPatientId:
+          type: string
+          description: can be null
+        bookedTime:
+          type: string
+          format: datetime
+          description: The datetime when the patient booked on Healthengine (YYYY-MM-DD HH24:MI:SS in UTC)
+        bookingStatus:
+          $ref: '#/components/schemas/BookingStatus'
+        pmsAppointmentTime:
+          type: string
+          format: datetime
+          description: The datetime of the booking at the practice (YYYY-MM-DD HH24:MI:SS at Practice time)
+        pmsAppointmentLength:
+          type: integer
+          format: int64
+          description: in seconds
+        reason:
+          type: string
+          description: Reason entered by patient if requested in the booking form. It may contain multiple lines, each with additional data separated by newline characters. Usually add these in booking notes in the PMS. 
+        comments:
+          type: string
+          description: Currently hold the Healthengine appointment type
+        patient:
+          $ref: '#/components/schemas/Patient'
+        telehealthUrl:
+          type: string
+          description: The URL for a practitioner to start a telehealth consult, if it does not exist, the booking may still be a telehealth appointment, you should check the appointment type. It just means that the URL is not given by Healthengine and may be a skype ID or another method of telehealth appointment.
+    BookingStatus:
+      type: string
+      description: A booking created in Healthengine will initially be "Requested" until the PMS has called /bookings/{bookingId}/confirmInsert, or the practice has manually progressed the booking via another method.
+      enum:
+      - Requested
+      - Confirmed
+      - Cancelled
+    Patient:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        dob:
+          type: string
+          description: DD-MM-YYYY
+          example: 23-02-2022
+          format: date
+        phone:
+          type: string
+        email:
+          type: string
+        address:
+          type: string
+        suburb:
+          type: string
+        state:
+          type: string
+        postcode:
+          type: string
+        gender:
+          type: string
+          enum:
+          - Male
+          - Female
+          - Other
+          description: can be null
+        medicareNumber:
+          type: string
+          description: can be null
+        medicareIrn:
+          type: string
+          description: can be null
+        medicareExpiry:
+          type: string
+          description: "format: m/Y (e.g. 05/2023), can be null"
+    BookingUpdate:
+      type: object
+      properties:
+        requestId:
+          type: integer
+          format: int64
+          description: A unique identifier of the request that is sequential in relation to other requests
+        bookingId:
+          type: integer
+          format: int64
+        pmsAppointmentIds:
+          type: array
+          items:
+            type: string
+        pmsPatientId:
+          type: string
+        updatedAt:
+          type: string
+          format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+        bookingStatus:
+          $ref: '#/components/schemas/BookingStatus'
+
+    # schemas: availability
+    AvailabilitySnapshot:
+      required:
+        - date
+        - pmsResourceId
+        - availability
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: YYYY-MM-DD at Practice time
+        pmsResourceId:
+          type: string
+        availability:
+          type: array
+          items:
+            required:
+              - start
+              - end
+              - slotLength
+            type: object
+            properties:
+              start:
+                type: string
+                format: time
+                description: range start time (HH24:MI at Practice time)
+              end:
+                type: string
+                format: time
+                description: range end time (HH24:MI at Practice time)
+              slotLength:
+                type: integer
+                format: int64
+                description: >
+                  Slot length in seconds.
+                  If this value is > 0 then it will be used when publishing availability.
+                  If this value == 0 then the Healthengine configured appointment length will be used.
+              pmsAppointmentTypeIds:
+                type: array
+                description: array of string ids of PMS appointment types applicable for this availability range
+                items:
+                  type: string
+
+    # schemas: configuration
+    PmsResource:
+      required:
+        - pmsResourceId
+        - pmsResourceName
+      type: object
+      properties:
+        pmsResourceId:
+          type: string
+          description: need to be unique
+        pmsResourceName:
+          type: string
+          description: need to be unique
+        pmsPractitionerTitle:
+          type: string
+        pmsPractitionerFirstname:
+          type: string
+        pmsPractitionerLastname:
+          type: string
+    PmsAppointmentType:
+      required:
+        - pmsAppointmentTypeId
+        - pmsAppointmentTypeName
+      type: object
+      properties:
+        pmsAppointmentTypeId:
+          type: string
+          description: need to be unique
+        pmsAppointmentTypeName:
+          type: string
+          description: need to be unique
+        pmsAppointmentLength:
+          type: integer
+          format: int64
+          description: in minutes
+        pmsResourceId:
+          type: string
+          description: pmsResourceId associated to this appointment type
+                       (optional if all resources share the same appointment types)
+    LivenessContract:
+      type: object
+      properties:
+        liveHours:
+          $ref: '#/components/schemas/Schedule'
+    Schedule:
+      type: object
+      properties:
+        monday:
+          $ref: '#/components/schemas/RangeSet'
+        tuesday:
+          $ref: '#/components/schemas/RangeSet'
+        wednesday:
+          $ref: '#/components/schemas/RangeSet'
+        thursday:
+          $ref: '#/components/schemas/RangeSet'
+        friday:
+          $ref: '#/components/schemas/RangeSet'
+        saturday:
+          $ref: '#/components/schemas/RangeSet'
+        sunday:
+          $ref: '#/components/schemas/RangeSet'
+        publicHolidays:
+          $ref: '#/components/schemas/RangeSet'
+    RangeSet:
+      type: array
+      items:
+        $ref: '#/components/schemas/Range'
+    Range:
+      type: object
+      properties:
+        start:
+          type: string
+          format: time
+          description: range start time (HH24:MI at Practice time)
+        end:
+          type: string
+          format: time
+          description: range end time (HH24:MI at Practice time)
+
+    # schemas: features
+    Feature:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+          description: Feature id
+        name:
+          type: string
+          description: Feature name
+        description:
+          type: string
+          description: Feature description
+        enabled:
+          type: boolean
+          description: true when this feature is enabled and supported at your end (false by default)
+
+    # schemas: subscriptions
+    Subscription:
+      required:
+        - topic
+        - callbackUrl
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Healthengine subscription id generated internally (UUID).  Ignored when creating a subscription"
+        clientId:
+          $ref: '#/components/schemas/ClientId'
+        topic:
+          $ref: '#/components/schemas/SubscriptionTopic'
+        callbackUrl:
+          type: string
+          description: "Callback URL that will receive events"
+        startAt:
+          type: string
+          format: datetime
+          description: "YYYY-MM-DD HH24:MI:SS in UTC (default NOW if not set)"
+        expireAt:
+          type: string
+          format: datetime
+          description: "YYYY-MM-DD HH24:MI:SS in UTC (default null if not set, no expiry)"
+    SubscriptionErrorLog:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this log message
+        subscriptionId:
+          type: string
+          description: Unique identifier for the subscription that created this error
+        subscriptionTopic:
+          $ref: '#/components/schemas/SubscriptionTopic'
+        clientId:
+          $ref: '#/components/schemas/ClientId'
+        callbackUrl:
+          type: string
+          description: The url attempted to call
+        payload:
+          $ref: '#/components/schemas/SubscriptionErrorLogPayload'
+        attempt:
+          type: integer
+          format: int64
+          description: On which attempt this error was raised
+        errorType:
+          type: string
+          description: Text description of the error type
+        errorMessage:
+          type: string
+          description: Human readable error message
+    SubscriptionTopic:
+      type: string
+      description: "Subscription topic"
+      enum:
+      - requests.*
+      - requests.bookings
+      - requests.bookingUpdates
+      - requests.availability
+      - requests.pmsAppointmentChanges
+      - requests.pmsResources
+      - requests.pmsAppointmentTypes
+      - requests.availableDocuments
+      - requests.uploadDocuments
+      - requests.clientSnapshots
+      - requests.attachDocuments
+    SubscriptionErrorLogPayload:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the subscription
+        timestamp:
+          type: string
+          format: datetime
+          description: The time the webhook was originally called
+        clientId:
+          $ref: '#/components/schemas/ClientId'
+        topic:
+          $ref: '#/components/schemas/SubscriptionTopic'
+        data:
+          $ref: '#/components/schemas/SubscriptionPayloadData'
+    SubscriptionPayloadData:
+      type: object
+      properties:
+        target:
+          type: string
+          description: The PMS API endpoint this subscription event was to notify for
+        requestType:
+          type: string
+          description: The request type this subscription was to notify for
+        bookingId:
+          type: integer
+          format: int64
+          description: Unique reference to Healthengine booking id (if applicable)
+        requestId:
+          type: integer
+          format: int64
+          description: Unique reference to Healthengine request id (if applicable)
+    ClientId:
+      type: string
+      description: "Client subscription id.  If set, will be included in all events sent for this subscription."
+
+    # schemas: documents
+    DocumentMetadata:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+          description: Healthengine booking id the document is related to, required
+        pmsDocumentId:
+          type: string
+          description: PMS document id, need to be unique
+        documentType:
+          type: string
+          description: "Document type: scripts, referral"
+        documentName:
+          type: string
+        documentDescription:
+          type: string
+        documentFormat:
+          type: string
+          description: "MIME type. See: [Common types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)"
+        documentSize:
+          type: integer
+          format: int64
+          description: "Document size in bytes"
+        createdAt:
+          type: string
+          format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+        updatedAt:
+          type: string
+          format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+    Document:
+      allOf:
+      - $ref: '#/components/schemas/DocumentMetadata'
+      - type: object
+        properties:
+          documentContent:
+            type: string
+            format: base64
+            description: binary base64 encoded
+    RejectDocumentUpload:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+          format: int64
+          description: Healthengine booking id the document is related to, required
+        pmsDocumentId:
+          type: string
+          description: PMS document id, need to be unique
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+
+    # schemas: client snapshot
+    ClientSnapshot:
+      required:
+        - date
+        - dateType
+        - locations
+        - practitioners
+        - appointmentTypes
+        - appointments
+        - patients
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Snapshot date to send client snapshot for (YYYY-MM-DD)
+        dateType:
+          type: string
+          description: >
+            Snapshot date type.
+            For appt_datetime, you should return all appointments where appointment date matches snapshot date.
+            For appt_creation_datetime, you should return all appointments where appointment creation date (or booking date) matches snapshot date.
+          enum:
+          - appt_datetime
+          - appt_creation_datetime
+        locations:
+          type: array
+          items:
+            required:
+              - pmsLocationId
+              - pmsLocationName
+              - pmsLocationStatus
+            type: object
+            properties:
+              pmsLocationId:
+                type: string
+              pmsLocationName:
+                type: string
+              pmsLocationStatus:
+                type: string
+                enum:
+                - active
+                - inactive
+        practitioners:
+          type: array
+          items:
+            required:
+              - pmsPractitionerId
+              - pmsPractitionerName
+              - pmsPractitionerStatus
+            type: object
+            properties:
+              pmsPractitionerId:
+                type: string
+              pmsPractitionerName:
+                type: string
+              pmsPractitionerStatus:
+                type: string
+                enum:
+                - active
+                - inactive
+        appointmentTypes:
+          type: array
+          items:
+            required:
+              - pmsAppointmentTypeId
+              - pmsAppointmentTypeName
+              - pmsAppointmentTypeStatus
+            type: object
+            properties:
+              pmsAppointmentTypeId:
+                type: string
+              pmsAppointmentTypeName:
+                type: string
+              pmsAppointmentTypeStatus:
+                type: string
+                enum:
+                - active
+                - inactive
+        appointments:
+          type: array
+          items:
+            required:
+              - pmsAppointmentId
+              - pmsPatientId
+              - pmsPractitionerId
+              - pmsAppointmentTypeId
+              - pmsAppointmentCreationTime
+              - pmsAppointmentTime
+              - pmsAppointmentLength
+              - pmsAppointmentStatus
+            type: object
+            properties:
+              pmsAppointmentId:
+                type: string
+              pmsPatientId:
+                type: string
+              pmsPractitionerId:
+                type: string
+              pmsAppointmentTypeId:
+                type: string
+              pmsAppointmentCreationTime:
+                  type: string
+                  format: datetime
+                  description: YYYY-MM-DD HH24:MI:SS at Practice Timezone
+              pmsAppointmentTime:
+                  type: string
+                  format: datetime
+                  description: YYYY-MM-DD HH24:MI:SS at Practice Timezone
+              pmsAppointmentLength:
+                type: integer
+                description: in minutes
+              pmsAppointmentStatus:
+                type: string
+                enum:
+                - booked
+                - patient-dna
+                - patient-arrived
+                - patient-in-consult
+                - patient-complete
+                - cancelled
+        patients:
+          type: array
+          items:
+            required:
+              - pmsPatientId
+              - pmsPatientFirstname
+              - pmsPatientLastname
+              - pmsPatientCreationTime
+            type: object
+            properties:
+              pmsPatientId:
+                type: string
+              pmsPatientFirstname:
+                type: string
+              pmsPatientLastname:
+                type: string
+              pmsPatientPreferredName:
+                type: string
+              pmsPatientPhoneMobile:
+                type: string
+              pmsPatientPhoneHome:
+                type: string
+              pmsPatientPhoneWork:
+                type: string
+              pmsPatientSmsConsent:
+                type: boolean
+              pmsPatientAge16AndUnder:
+                type: boolean
+              pmsPatientCreationTime:
+                  type: string
+                  format: datetime
+                  description: YYYY-MM-DD HH24:MI:SS at Practice Timezone
+
+    # schemas: attachDocuments
+    AttachDocumentMetadata:
+      type: object
+      properties:
+        pmsPatientId:
+          type: string
+          description: PMS patient id
+        pmsAppointmentId:
+          type: string
+          description: "PMS appointment id (optional: set when document is related to a PMS appointment)"
+          nullable: true
+        bookingId:
+          type: integer
+          format: int64
+          description: "Healthengine booking id (optional: set when document is related to an Healthengine booking)"
+          nullable: true
+        documentId:
+          type: string
+          description: "Healthengine document id (optional: usually set but can be null)"
+          nullable: true
+        documentType:
+          type: string
+          description: "Document type/category: NEW PATIENT FORM, PRE-SCREENING FORM, REFERRAL, ..."
+        documentName:
+          type: string
+          description: "Document name/subject: New Patient Form, Pre-Screening Form, Referral, ..."
+        documentDescription:
+          type: string
+        documentFormat:
+          type: string
+          description: "MIME type. See: [Common types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)"
+        documentSize:
+          type: integer
+          format: int64
+          description: "Document size in bytes"
+        documentHash:
+          type: string
+          format: sha1
+          description: "Document hash (SHA-1)"
+        createdAt:
+          type: string
+          format: datetime
+          description: YYYY-MM-DD HH24:MI:SS in UTC
+    AttachDocument:
+      allOf:
+      - $ref: '#/components/schemas/AttachDocumentMetadata'
+      - type: object
+        properties:
+          documentContent:
+            type: string
+            format: base64
+            description: binary base64 encoded
+    ConfirmAttachDocument:
+      type: object
+      properties:
+        pmsDocumentId:
+          type: string
+          description: "PMS document id (can be null but recommended to be set when possible)"
+          nullable: true
+    RejectAttachDocument:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: A reason for internal use only to aid Healthengine in responding to support queries.
+          nullable: true
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content: {}
+    NotFoundError:
+      description: Resource not found
+      content: {}
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Error reason
+    ForbiddenError:
+      description: Missing permissions to perform action or get resource
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Error reason
+    GoneError:
+      description: The resource is not available anymore (e.g. already handled or expired)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Error reason
+
+# 1) Define the security scheme type (HTTP bearer)
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: api-key
+      description: api-key header containing API key
+    PracticeId:
+      type: apiKey
+      in: header
+      name: practice-id
+      description: practice-id header containing Practice ID
+
+# 2) Apply the security globally to all operations
+security:
+  - ApiKeyAuth: []
+    PracticeId: []
