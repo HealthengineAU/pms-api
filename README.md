@@ -7,7 +7,7 @@ The Healthengine Practice Management Software (PMS) API is designed to enable au
 
 This integration serves the purpose of displaying bookable resources and their availability on the Healthengine booking platform.
 
-Our [API definition](openapi.yaml) is formatted in OpenAPI v3. You can conveniently view it using popular tools like [SwaggerHub](https://swagger.io/tools) or [Swagger Editor](https://editor.swagger.io).
+Our [API definition](openapi.yaml) is formatted in OpenAPI v3 and can be viewed [here](https://healthengineau.github.io/pms-api/).
 
 Following your initial review of our API definition, we strongly recommend referring to our [quick start guide](docs/quick-start-guide.md) . This guide outlines the necessary steps to establish a functional integration and the subsequent procedures for going live once the development phase is concluded.
 
