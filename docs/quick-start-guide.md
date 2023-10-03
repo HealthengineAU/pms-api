@@ -285,15 +285,16 @@ It is possible to subscribe to the following types of requests, or `requests.*` 
 
 | Request type          | Associated target               | Extra feature (if applicable) |
 | --------------------- | --------------------------------| ----------------------------- |
+| attachDocuments       | /requests/attachDocuments       | attachDocuments               |
+| availability          | /requests/availability          |                               |
+| availableDocuments    | /requests/availableDocuments    | documents                     |
 | bookings              | /requests/bookings              |                               |
 | bookingUpdates        | /requests/bookingUpdates        |                               |
-| availability          | /requests/availability          |                               |
+| clientSnapshots       | /requests/clientSnapshots       | clientSnapshots               |
 | pmsAppointmentChanges | /requests/pmsAppointmentChanges |                               |
 | pmsAppointmentTypes   | N/A                             |                               |
 | pmsResources          | N/A                             |                               |
-| availableDocuments    | /requests/availableDocuments    | documents                     |
 | uploadDocuments       | /requests/uploadDocuments       | documents                     |
-| clientSnapshots       | /requests/clientSnapshots       | clientSnapshots               |
 
 More information on request types and subscriptions is available in our [API definition](../openapi.yaml).
 
