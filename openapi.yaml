@@ -6,7 +6,7 @@ info:
     in order to allow booking of appointments.
   contact:
     email: integrations@healthengine.com.au
-  version: 1.6.0
+  version: 1.7.0
 
 servers:
 - url: https://healthengine.com.au/pms-api/v1
