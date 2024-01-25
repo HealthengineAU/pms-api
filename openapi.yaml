@@ -685,7 +685,7 @@ paths:
     post:
       tags:
       - configuration
-      summary: Upload PMS appointment types snapshot 
+      summary: Upload PMS appointment types snapshot
       description: Upload a snapshot of supported PMS appointment types
       operationId: uploadPmsAppointmentTypes
       requestBody:
@@ -1924,7 +1924,7 @@ components:
           description: in seconds
         reason:
           type: string
-          description: Reason entered by patient if requested in the booking form. It may contain multiple lines, each with additional data separated by newline characters. Usually add these in booking notes in the PMS. 
+          description: Reason entered by patient if requested in the booking form. It may contain multiple lines, each with additional data separated by newline characters. Usually add these in booking notes in the PMS.
         comments:
           type: string
           description: Currently hold the Healthengine appointment type
@@ -2568,18 +2568,24 @@ components:
 
 # 1) Define the security scheme type (HTTP bearer)
   securitySchemes:
-    ApiKeyAuth:
+    ApiKey:
       type: apiKey
       in: header
       name: api-key
-      description: api-key header containing API key
+      description: Consumer level API key
     PracticeId:
       type: apiKey
       in: header
       name: practice-id
-      description: practice-id header containing Practice ID
+      description: Practice id of consenting practice
+    PracticeKey:
+      type: apiKey
+      in: header
+      name: practice-key
+      description: Practice key of consenting practice
 
 # 2) Apply the security globally to all operations
 security:
-  - ApiKeyAuth: []
+  - ApiKey: []
     PracticeId: []
+    PracticeKey: []

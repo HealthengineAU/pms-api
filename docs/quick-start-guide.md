@@ -35,19 +35,20 @@ All interactions using the API key are conducted over HTTPS for security.
 To gain access to a practice's Healthengine profile and data, the practice administrator must grant consent.
 
 This can be accomplished by the practice administrator following these steps:
-1. Contacting the Healthengine support team via phone at 1300 377 639 or email at support@healthengine.com.au to enable access to the PMS API
-2. Visiting the Healthengine API Consumer Consent page within the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal
-3. Clicking the 'Grant new consent' button and selecting your API consumer as the integration vendor
+1. Contacting the Healthengine support team via phone at 1300 377 639 or email at support@healthengine.com.au to enable access to the PMS API  
+2. Visiting the Healthengine API Consumer Consent page within the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal  
+3. Clicking the 'Grant new consent' button and selecting your API consumer as the integration vendor  
+4. Retrieving the supplied practice ID and practice key on consent grant success  
 
 ![Granting consent via the practice admin integration consent page](../assets/quick-start-guide/grant-consent.png)
 
-Once consent is granted, you will need to provide a way for the practice to provide you with their Healthengine practice ID, which you can use to link it to a PMS account or location.
+Once consent is granted, you will need to provide a way for the practice to provide you with their Healthengine practice ID and practice key, which you can use to link the practice to a PMS account or location.
 
 ---
 
 ## Syncing practice configuration
 
-Once a practice has granted your consent and has provided their practice ID, some initial configuration must be supplied before attempting to sync available appointments and bookings.
+Once a practice has granted you consent and has provided you their practice ID and practice key, some initial configuration must be supplied before attempting to sync available appointments and bookings.
 
 This configuration data should be transmitted both when a new Healthengine practice ID is associated with a PMS account or location and whenever there are updates to the corresponding data within the PMS.
 

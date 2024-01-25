@@ -10,27 +10,27 @@ To ensure the seamless functioning of this integration, we strongly advise condu
 
 ## Linking a PMS account to one or more Healthengine practices
 
-Once a practice using Healthengine has granted consent for you to access their data via the Healthengine Practice Admin portal or by contacting Healthengine support, you should establish a method for the practice to share their Healthengine practice ID with you. This ID is essential for initiating the data synchronisation process with Healthengine.
+Once a practice using Healthengine has granted consent for you to access their data via the Healthengine Practice Admin portal or by contacting Healthengine support, you should establish a method for the practice to share their Healthengine practice ID and practice key with you. These credentials are essential for initiating the data synchronisation process with Healthengine.
 
 **Scenario: Linking the PMS account with a Healthengine practice**  
 **Given** the presence of a PMS account  
-**When** a Healthengine practice ID is supplied  
+**When** a Healthengine practice ID and practice key are supplied  
 **Then** an effort to transmit practice configuration to Healthengine must be initiated
 
-**Scenario: Practice provides Healthengine practice ID without prior consent**  
-**Given**  a PMS account in which a Healthengine practice ID has been provided  
+**Scenario: Practice provides Healthengine practice ID and practice key without consent or for a revoked consent**  
+**Given**  a PMS account in which a practice ID and practice key have been provided which do not belong to a non-revoked consent for your consumer
 **When** a 403 Unauthorized response is received upon attempting to transmit practice configuration  
 **Then** the PMS user must be informed and guided to establish consent within Healthengine
 
 **Scenario: Integration of PMS Account with multi-location support**  
-**Given** a PMS account capable of accommodating multiple locations  
+**Given** a PMS account capable of accommodating multiple PMS locations  
 **When** these locations are represented as distinct Healthengine practices  
-**Then**  it should be feasible to input multiple Healthengine practice IDs and associate an ID with one or more locations
+**Then**  it should be feasible to input multiple Healthengine practice ID and practice key combinations and associate each one with one or more PMS locations
 
 **Scenario: Updating a Healthengine practice ID for a PMS account or location**  
-**Given** a PMS account or location with a previously assigned Healthengine practice ID for integration purposes  
-**When** the Healthengine practice ID is updated  
-**Then** practice configuration must be established for the new Healthengine practice ID, and data transmission should cease for the previous Healthengine practice ID
+**Given** a PMS account or location with a previously assigned Healthengine practice ID and practice key for integration purposes  
+**When** the Healthengine practice ID and practice key are updated  
+**Then** practice configuration must be established for the new Healthengine practice, and data transmission should cease for the previous Healthengine practice
 
 ---
 
@@ -46,7 +46,7 @@ It is important to note that for snapshot endpoints, the absence of an item in t
 
 **Scenario: Initial configuration synchronisation**  
 **Given** the presence of a PMS account or location  
-**When** a new Healthengine practice ID is supplied  
+**When** a new Healthengine practice ID and practice key are supplied  
 **Then** the following components must be provided: a liveness contract, a resource snapshot, and an appointment type snapshot
 
 **Scenario: Updating liveness contract times in the PMS**  
