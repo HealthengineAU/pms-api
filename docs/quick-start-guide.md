@@ -35,10 +35,10 @@ All interactions using the API key are conducted over HTTPS for security.
 To gain access to a practice's Healthengine profile and data, the practice administrator must grant consent.
 
 This can be accomplished by the practice administrator following these steps:
-1. Contacting the Healthengine support team via phone at 1300 377 639 or email at support@healthengine.com.au to enable access to the PMS API  
-2. Visiting the Healthengine API Consumer Consent page within the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal  
-3. Clicking the 'Grant new consent' button and selecting your API consumer as the integration vendor  
-4. Retrieving the supplied practice ID and practice key on consent grant success  
+1. Contacting the Healthengine support team via phone at 1300 377 639 or email at support@healthengine.com.au to enable access to the PMS API
+2. Visiting the Healthengine API Consumer Consent page within the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal
+3. Clicking the 'Grant new consent' button and selecting your API consumer as the integration vendor
+4. Retrieving the supplied practice ID and practice key on consent grant success
 
 ![Granting consent via the practice admin integration consent page](../assets/quick-start-guide/grant-consent.png)
 
@@ -50,7 +50,11 @@ Once consent is granted, you will need to provide a way for the practice to prov
 
 Once a practice has granted you consent and has provided you their practice ID and practice key, some initial configuration must be supplied before attempting to sync available appointments and bookings.
 
-This configuration data should be transmitted both when a new Healthengine practice ID is associated with a PMS account or location and whenever there are updates to the corresponding data within the PMS.
+This configuration data should be transmitted when;
+1. a Healthengine practice ID is associated with a PMS account or location
+2. the integration was disabled in your software via configuration and has now been enabled
+3. a user opts to resync their practice configuration via a dedicated action in your software
+3. whenever there are updates to the corresponding data within your software while the integration is enabled
 
 ### The liveness contract
 
@@ -178,7 +182,13 @@ Availability can be conveyed as time ranges, such as 9 am to 5 pm, until they ar
 
 If your software supports it, you have the ability to transmit availability that is exclusive to certain appointment types for a given practitioner using the 'pmsAppointmentTypeIds' field. This feature allows you to accommodate scenarios like Dr. Do Good only conducting patient visits on Tuesdays.
 
-It is imperative to update and send a new snapshot of this availability whenever there are changes, or when it is requested through the requests endpoint.
+It is important to send availability snapshots as often as possible to avoid availability in Healthengine becoming stale and causing booking failures.
+
+We strongle recommend you send availability in the following situations:
+1. when resource availability has been changed in your software
+2. when the integration is disabled via configuration in your software and is enabled again
+3. when requested by us via the availability snapshot request endpoint
+4. periodically **at least** once a day to avoid changes being missed in situations 1-3
 
 An example availability snapshot POST follows.
 
@@ -260,9 +270,12 @@ It is crucial to promptly address these types of requests. Failure to do so with
 
 We provide two notification methods for incoming requests that have been generated: webhook subscriptions and polling.
 
-### Webhook subscriptions
+### Webhook subscription method
 
 To help you determine when to call the request endpoints, you can set up webhook subscriptions to notify you about the occurring events.
+
+> :warning: **PLEASE NOTE**  
+While this method is useful in reducing the number of calls to maintain a healthy integration, you **must** also implement the polling method to respond to any missed requests due to transient network issues and the integration being disabled in your software.
 
 An example subscription POST follows.
 
@@ -385,9 +398,13 @@ This will give you a result like so:
 
 This feature enables you to identify instances where the webhook has encountered multiple failures. In this particular scenario, it attempted to execute the task three times, and the log provided pertains to the last failed attempt.
 
-### Polling
+### Polling method
 
-The alternative to primarily resolving requests via webhook payloads is to periodically poll our requests convenience endpoint that will then tell you which other request endpoints require resolving.
+This method involves periodically polling our requests endpoint that will then tell you which other request endpoints require resolving.
+
+If you are not also implementing the webhook subscription method, this endpoint should be called frequently to ensure that requests are dealt with in a timely fashion.
+
+If you are implementing the webhook subscription method, you should still poll this endpoint periodically on a less frequent basis. This practice helps in identifying any missed requests caused by transient network issues or the integration being temporarily disabled within your software.
 
 An example requests GET follows.
 

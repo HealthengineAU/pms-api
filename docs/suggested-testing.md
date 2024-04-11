@@ -6,6 +6,8 @@ After gaining access to our test environment, a user of the Healthengine PMS API
 
 To ensure the seamless functioning of this integration, we strongly advise conducting the following minimal set of tests prior to going live.
 
+Neglecting to satisfy these tests could potentially lead to your integration not being approved during the go-live process.
+
 ---
 
 ## Linking a PMS account to one or more Healthengine practices
@@ -18,7 +20,7 @@ Once a practice using Healthengine has granted consent for you to access their d
 **Then** an effort to transmit practice configuration to Healthengine must be initiated
 
 **Scenario: Practice provides Healthengine practice ID and practice key without consent or for a revoked consent**  
-**Given**  a PMS account in which a practice ID and practice key have been provided which do not belong to a non-revoked consent for your consumer
+**Given**  a PMS account in which a practice ID and practice key have been provided which do not belong to a non-revoked consent for your consumer  
 **When** a 403 Unauthorized response is received upon attempting to transmit practice configuration  
 **Then** the PMS user must be informed and guided to establish consent within Healthengine
 
@@ -64,6 +66,16 @@ It is important to note that for snapshot endpoints, the absence of an item in t
 **When** an existing PMS appointment type is altered, removed, or a new PMS appointment type is introduced  
 **Then** an updated PMS appointment type snapshot should be promptly communicated to Healthengine
 
+**Scenario: Manual configuration resync action by PMS user**  
+**Given** an integrated PMS account or location  
+**When** a PMS user opts to manually resync the PMS account or location configuration to Healthengine  
+**Then** there should be a solution available to them to do so
+
+**Scenario: Sending configuration after being temporarily disabled**  
+**Given** an integrated PMS account or location in a temporarily disabled state due to configuration in your software  
+**When** a PMS user re-enables this integration  
+**Then** configuration should be sent to Healthengine
+
 ---
 
 ## Handling PMS resource edge cases
@@ -74,6 +86,31 @@ Please consider these additional edge cases related to PMS resources when refini
 **Given** the potential for a single practitioner to possess multiple specialties within a PMS  
 **When** sending a PMS resource snapshot to Healthengine  
 **Then** distinct PMS resources should be sent for each practitioner/specialty combination
+
+---
+
+## Syncing resource availability
+
+Availability snapshots are expected to be sent to us without an incoming request for each PMS resource multiplied by the number of days that you are syncing into the future.
+
+We will only request an availability snapshot from you if we have attempted to insert a booking and the request has been rejected, indicating that we might have stale availability for the resource and date. 
+
+Resource availability should be sent to us whenever the availability has been changed in your software for a resource and date. Some examples include:
+- Changing a resource's available hours
+- Creating a non-Healthengine booking for the resource
+- The integration being re-enabled after being disabled via configuration in your software
+
+There should also be a sync periodically to avoid any missed updates and a manual resync option available to PMS users.
+
+**Scenario: Manual availability resync action by PMS user**  
+**Given** an integrated PMS account or location  
+**When** a PMS user opts to manually resync availability to Healthengine  
+**Then** there should be a solution available to them to sync availability for all resources for the future sync period
+
+**Scenario: Sending availability after being temporarily disabled**  
+**Given** an integrated PMS account or location in a temporarily disabled state due to configuration in your software   
+**When** a PMS user re-enables this integration  
+**Then** availability for all resources should be sent to Healthengine
 
 ---
 
