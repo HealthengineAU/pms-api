@@ -151,7 +151,7 @@ We strongly advise that you continue to periodically check the requests endpoint
 **Scenario: Handling missed webhook payloads**  
 **Given** that a webhook subscription has been established for a specific request type  
 **When** a webhook payload is missed because the maximum number of unacknowledged requests is reached  
-**Then** regular polling of the requests endpoint should be employed to capture any missed requests
+**Then** polling the requests endpoint at least once an hour should be done to capture any missed requests
 
 ---
 

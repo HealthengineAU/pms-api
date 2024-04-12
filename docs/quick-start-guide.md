@@ -400,11 +400,11 @@ This feature enables you to identify instances where the webhook has encountered
 
 ### Polling method
 
-This method involves periodically polling our requests endpoint that will then tell you which other request endpoints require resolving.
+This method involves periodically polling our 'requests' endpoint that will then tell you which other request endpoints require resolving.
 
-If you are not also implementing the webhook subscription method, this endpoint should be called frequently to ensure that requests are dealt with in a timely fashion.
+If you are not also implementing the webhook subscription method, this endpoint should be called at least once every five seconds to ensure that requests are dealt with in a timely fashion.
 
-If you are implementing the webhook subscription method, you should still poll this endpoint periodically on a less frequent basis. This practice helps in identifying any missed requests caused by transient network issues or the integration being temporarily disabled within your software.
+If you are implementing the webhook subscription method, you should still poll this endpoint at least once an hour. This practice helps in identifying any missed requests caused by transient network issues or the integration being temporarily disabled within your software.
 
 An example requests GET follows.
 
