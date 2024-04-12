@@ -275,7 +275,7 @@ We provide two notification methods for incoming requests that have been generat
 To help you determine when to call the request endpoints, you can set up webhook subscriptions to notify you about the occurring events.
 
 > :warning: **PLEASE NOTE**  
-While this method is useful in reducing the number of calls to maintain a healthy integration, you **must** also implement the polling method to respond to any missed requests due to transient network issues and the integration being disabled in your software.
+While this method is useful in reducing the number of calls to maintain a healthy integration, you **must** also implement the polling method and poll the requests endpoint at least once an hour to respond to any missed requests due to transient network issues and the integration being disabled in your software.
 
 An example subscription POST follows.
 
