@@ -36,7 +36,7 @@ Once a practice using Healthengine has granted consent for you to access their d
 
 ---
 
-## PMS account/location configuration synchronisation
+## Initial configuration synchronisation
 
 Upon the establishment of a PMS account, or a PMS location in a multi-location-per-account setup, the following configuration must be provided before initiating the synchronisation of resource availability and bookings:
 
@@ -78,14 +78,19 @@ It is important to note that for snapshot endpoints, the absence of an item in t
 
 ---
 
-## Handling PMS resource edge cases
+## Initial configuration synchronisation edge cases
 
-Please consider these additional edge cases related to PMS resources when refining your integration logic.
+Please consider these additional edge cases related to initial configuration when designing your integration logic.
 
 **Scenario: Managing PMS practitioners with multiple specialties**  
 **Given** the potential for a single practitioner to possess multiple specialties within a PMS  
 **When** sending a PMS resource snapshot to Healthengine  
 **Then** distinct PMS resources should be sent for each practitioner/specialty combination
+
+**Scenario: Outstanding requests during initial configuration synchronisation**  
+**Given** the presence of a PMS account or location  
+**When** a new Healthengine practice ID and practice key are supplied  
+**Then** the 'requests' endpoint should be checked for any outstanding requests from a practice's previous integration (e.g. booking attempt)
 
 ---
 
@@ -130,6 +135,11 @@ Certain types of requests hold a higher priority in terms of integration health.
 **When** an incoming booking, bookingUpdate or availability request is created  
 **Then** the integration should resolve this request within ten minutes
 
+**Scenario: Checking for outstanding requests after being temporarily disabled**  
+**Given** an integrated PMS account or location in a temporarily disabled state due to configuration in your software   
+**When** a PMS user re-enables this integration  
+**Then** the 'requests' endpoint should be checked for any outstanding requests
+
 ---
 
 ## Handling incoming requests via webhook subscriptions
@@ -152,6 +162,11 @@ We strongly advise that you continue to periodically check the requests endpoint
 **Given** that a webhook subscription has been established for a specific request type  
 **When** a webhook payload is missed because the maximum number of unacknowledged requests is reached  
 **Then** polling the requests endpoint at least once an hour should be done to capture any missed requests
+
+**Scenario: Checking for outstanding requests after being temporarily disabled**  
+**Given** an integrated PMS account or location in a temporarily disabled state due to configuration in your software   
+**When** a PMS user re-enables this integration  
+**Then** the 'requests' endpoint should be checked for any outstanding requests
 
 ---
 
