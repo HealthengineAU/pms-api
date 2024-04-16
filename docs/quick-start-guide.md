@@ -184,7 +184,7 @@ If your software supports it, you have the ability to transmit availability that
 
 It is important to send availability snapshots as often as possible to avoid availability in Healthengine becoming stale and causing booking failures.
 
-We strongle recommend you send availability in the following situations:
+We strongly recommend you send availability in the following situations:
 1. when resource availability has been changed in your software
 2. when the integration is disabled via configuration in your software and is enabled again
 3. when requested by us via the availability snapshot request endpoint
