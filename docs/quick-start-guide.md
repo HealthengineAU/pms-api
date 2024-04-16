@@ -50,7 +50,7 @@ Once consent is granted, you will need to provide a way for the practice to prov
 
 Once a practice has granted you consent and has provided you their practice ID and practice key, some initial configuration must be supplied before attempting to sync available appointments and bookings.
 
-This configuration data should be transmitted when;
+This configuration data should be transmitted when:
 1. a Healthengine practice ID is associated with a PMS account or location
 2. the integration was disabled in your software via configuration and has now been enabled
 3. a user opts to resync their practice configuration via a dedicated action in your software
