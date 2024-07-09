@@ -6,7 +6,7 @@ info:
     in order to allow booking of appointments.
   contact:
     email: integrations@healthengine.com.au
-  version: 1.7.0
+  version: 1.8.0
 
 servers:
 - url: https://healthengine.com.au/pms-api/v1
@@ -1933,6 +1933,9 @@ components:
         telehealthUrl:
           type: string
           description: The URL for a practitioner to start a telehealth consult, if it does not exist, the booking may still be a telehealth appointment, you should check the appointment type. It just means that the URL is not given by Healthengine and may be a skype ID or another method of telehealth appointment.
+        isNewPatient:
+          type: boolean
+          description: Set to true when patient claimed to be a new patient for practice, false otherwise
     BookingStatus:
       type: string
       description: A booking created in Healthengine will initially be "Requested" until the PMS has called /bookings/{bookingId}/confirmInsert, or the practice has manually progressed the booking via another method.
