@@ -32,7 +32,7 @@ The API key will be securely provided to you and should be treated as confidenti
 
 All interactions using the API key are conducted over HTTPS for security.
 
-To gain access to a practice's Healthengine profile and data, the practice administrator must grant consent.
+To gain access to a practice's Healthengine profile and data, the practice administrator must grant consent and provide practice ID and practice key to be added in API request header.
 
 This can be accomplished by the practice administrator following these steps:
 1. Contacting the Healthengine support team via phone at 1300 377 639 or email at support@healthengine.com.au to enable access to the PMS API
@@ -72,6 +72,7 @@ An example liveness contract POST follows.
 POST https://healthengine.com.au/pms-api/v1/config/livenessContract
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json
@@ -121,6 +122,7 @@ An example PMS resources snapshot POST follows.
 POST https://healthengine.com.au/pms-api/v1/config/pmsResources/snapshot
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json
@@ -157,6 +159,7 @@ An example PMS appointment types snapshot POST follows.
 POST https://healthengine.com.au/pms-api/v1/config/pmsAppointmentTypes/snapshot
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json
@@ -196,6 +199,7 @@ An example availability snapshot POST follows.
 POST https://healthengine.com.au/pms-api/v1/availability/snapshot
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json
@@ -283,6 +287,7 @@ An example subscription POST follows.
 POST https://healthengine.com.au/pms-api/v1/subscription
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json
@@ -354,7 +359,7 @@ An example subscription error log GET follows.
 GET https://heweb.dev.he0.io/pms-api/v1/subscriptionErrorLog?subscriptionId=db26bebd-63f3-47d6-9fb8-09b4edc38aa7&from=2020-10-12+09%3A
  api-key: eyJ0e...
  practice-id: 1234567
- Content-Type: application/json
+ practice-key: t1qKf...
 ```
 
 For the best results you can specify from, to, and subscriptionId.
@@ -412,7 +417,7 @@ An example requests GET follows.
 GET https://healthengine.com.au/pms-api/v1/requests
  api-key: eyJ0e...
  practice-id: 1234567
- Content-Type: application/json
+ practice-key: t1qKf...
 ```
 
 and a result will look like this, indicating to call the /request/bookings endpoint (see [Handling incoming requests](#handling-incoming-requests))
@@ -431,7 +436,7 @@ After determining that we should retrieve booking requests either through pollin
 GET https://healthengine.com.au/pms-api/v1/requests/bookings
  api-key: eyJ0e...
  practice-id: 1234567
- Content-Type: application/json
+ practice-key: t1qKf...
 ```
 
 It's crucial to process all booking requests prior to handling booking updates. Furthermore, it's essential to ensure that all requests are appropriately addressed, either by confirming or rejecting them.
@@ -442,6 +447,7 @@ We confirm the booking by extracting the bookingId from the response and then re
 POST https://healthengine.com.au/pms-api/v1/bookings/36127212/confirmInsert
  api-key: eyJ0e...
  practice-id: 1234567
+ practice-key: t1qKf...
  Content-Type: application/json
 ```
 ```json

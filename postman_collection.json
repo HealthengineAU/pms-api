@@ -1,0 +1,1829 @@
+{
+	"info": {
+		"_postman_id": "50f8d746-5857-41e9-91cd-a21fbeb87b5d",
+		"name": "Healthengine PMS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/requests",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/bookings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/bookings?page=1",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"bookings"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/bookingUpdates",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/bookingUpdates",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"bookingUpdates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/availability",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/availability?page=1",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"availability"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/pmsAppointmentChanges",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/pmsAppointmentChanges",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"pmsAppointmentChanges"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/availableDocuments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/availableDocuments",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"availableDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/uploadDocuments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/uploadDocuments",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"uploadDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/clientSnapshots",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/clientSnapshots?page=1",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"clientSnapshots"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/requests/attachDocuments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/requests/uploadDocuments",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"requests",
+						"uploadDocuments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/confirmInsert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pmsAppointmentIds\": [\"1000\"],\n    \"pmsPatientId\": \"10\"\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/100/confirmInsert",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"100",
+						"confirmInsert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/rejectInsert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"reason\": \"Test reject insert reason\"\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/98/rejectInsert",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"98",
+						"rejectInsert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/confirmUpdate/{requestId}",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/50/confirmUpdate/1",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"50",
+						"confirmUpdate",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/rejectUpdate/{requestId}",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"reason\": \"Test reject update reason\"\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/53/rejectUpdate/2",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"53",
+						"rejectUpdate",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/cancel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reason\": \"Test cancellation reason\"\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/92/cancel",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"92",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/didNotAttend",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"reason\": \"Test DNA reason\"\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/50/didNotAttend",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"50",
+						"didNotAttend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/bookings/{bookingId}/noPmsApptChange",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/bookings/50/noPmsAppointmentChange",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"bookings",
+						"50",
+						"noPmsAppointmentChange"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/availability/snapshot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-10-01\",\r\n    \"pmsResourceId\": \"12345\",\r\n    \"availability\": [\r\n        {\r\n            \"start\": \"09:00\",\r\n            \"end\": \"12:00\",\r\n            \"slotLength\": \"30\"\r\n        },\r\n        {\r\n            \"start\": \"13:00\",\r\n            \"end\": \"17:00\",\r\n            \"slotLength\": \"60\",\r\n            \"pmsAppointmentTypeIds\":[\"G1236:12345\"]\r\n        }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/availability/snapshot",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"availability",
+						"snapshot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsResources/findById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsResources/findById?id=12345",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsResources",
+						"findById"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsResources",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsResources",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsResources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsResources/snapshot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"pmsResourceId\": \"12345\",\n        \"pmsResourceName\": \"Doctor Do Good\",\n        \"pmsPractitionerFirstname\": \"Do\",\n        \"pmsPractitionerLastname\": \"Good\",\n        \"pmsPractitionerTitle\": \"Doctor\"\n    },\n    {\n        \"pmsResourceId\": \"67890\",\n        \"pmsResourceName\": \"Dr Greg House\",\n        \"pmsPractitionerFirstname\": \"Greg\",\n        \"pmsPractitionerLastname\": \"House\",\n        \"pmsPractitionerTitle\": \"Dr\"\n    }\n]"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsResources/snapshot",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsResources",
+						"snapshot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsAppointmentTypes/findById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsAppointmentTypes/findById?id=2",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsAppointmentTypes",
+						"findById"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsAppointmentTypes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsAppointmentTypes",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsAppointmentTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/config/pmsAppointmentTypes/snapshot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"pmsAppointmentTypeId\": \"G1235:12345\",\n        \"pmsAppointmentTypeName\": \"General Appointment\",\n        \"pmsAppointmentLength\": \"30\",\n        \"pmsResourceId\": \"12345\"\n    },\n    {\n        \"pmsAppointmentTypeId\": \"G1236:12345\",\n        \"pmsAppointmentTypeName\": \"Long Appt\",\n        \"pmsAppointmentLength\": \"60\",\n        \"pmsResourceId\": \"12345\"\n    },\n    {\n        \"pmsAppointmentTypeId\": \"G1235:67890\",\n        \"pmsAppointmentTypeName\": \"General Appointment\",\n        \"pmsAppointmentLength\": \"20\",\n        \"pmsResourceId\": \"67890\"\n    },\n    {\n        \"pmsAppointmentTypeId\": \"Default\",\n        \"pmsAppointmentTypeName\": \"General Appointment\",\n        \"pmsAppointmentLength\": \"15\",\n        \"pmsResourceId\": \"\"\n    }\n]"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/pmsAppointmentTypes/snapshot",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"pmsAppointmentTypes",
+						"snapshot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /config/livenessContract",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/livenessContract",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"livenessContract"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /config/livenessContract",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{api-key}}"
+					},
+					{
+						"key": "practice-id",
+						"type": "text",
+						"value": "{{practice-id}}"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"liveHours\": {\r\n        \"monday\": [\r\n            {\"start\": \"08:00\", \"end\": \"17:00\"}\r\n        ],\r\n        \"tuesday\": [\r\n            {\"start\": \"13:00\", \"end\": \"15:00\"}\r\n        ],\r\n        \"wednesday\": [\r\n            {\"start\": \"08:30\", \"end\": \"12:30\"}\r\n        ],\r\n        \"thursday\": [\r\n            {\"start\": \"08:45\", \"end\": \"12:45\"},\r\n            {\"start\": \"13:45\", \"end\": \"17:45\"}\r\n        ],\r\n        \"friday\": [\r\n            {\"start\": \"00:00\", \"end\": \"12:00\"},\r\n            {\"start\": \"12:00\", \"end\": \"23:59\"}\r\n        ],\r\n        \"saturday\": [\r\n            {\"start\": \"13:45\", \"end\": \"14:45\"},\r\n            {\"start\": \"08:01\", \"end\": \"17:45\"}\r\n        ],\r\n        \"sunday\": [\r\n            {\"start\": \"09:00\", \"end\": \"12:00\"},\r\n            {\"start\": \"08:00\", \"end\": \"08:59\"}\r\n        ],\r\n        \"publicHolidays\": [\r\n            {\"start\": \"09:00\", \"end\": \"12:00\"}\r\n        ]\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/config/livenessContract",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"config",
+						"livenessContract"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /features",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/features",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"features"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /features/{id}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/features/clientSnapshots",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"features",
+						"clientSnapshots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /features/{id}/enable",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/features/documents/enable",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"features",
+						"documents",
+						"enable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /features/{id}/disable",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/features/clientSnapshots/disable",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"features",
+						"clientSnapshots",
+						"disable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /subscription",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscription",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /subscription",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"requests.bookings\",\r\n    \"callbackUrl\": \"http://yoururl.com.au/endpoint/bookings\",\r\n    \"expireAt\": \"2050-12-01 00:00:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscription",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /subscription/{id}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscription/49616dfd-0a99-4cfd-bdac-515e19cea169",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscription",
+						"49616dfd-0a99-4cfd-bdac-515e19cea169"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /subscription/{id}",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscription/42bb075b-4c48-4cc5-84d3-07a9c812b44a",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscription",
+						"42bb075b-4c48-4cc5-84d3-07a9c812b44a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /subscriptionErrorLog",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscriptionErrorLog",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscriptionErrorLog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /subscription/{id}",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topic\": \"requests.bookings\",\r\n    \"callbackUrl\": \"https://test.com/requests\",\r\n    \"startAt\": \"2020-09-09 09:08:48\",\r\n    \"expireAt\": \"2100-09-21 09:08:49\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/subscription/49616dfd-0a99-4cfd-bdac-515e19cea169",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"subscription",
+						"49616dfd-0a99-4cfd-bdac-515e19cea169"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/documents/available",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"bookingId\": 1,\r\n        \"pmsDocumentId\": \"9911\",\r\n        \"documentType\": \"scripts\",\r\n        \"documentName\": \"documentName Test\",\r\n        \"documentDescription\": \"documentDescription Test\",\r\n        \"documentFormat\": \"documentFormat Test\",\r\n        \"documentSize\": 2048,\r\n        \"createdAt\": \"2020-07-20 05:18:00\",\r\n        \"updatedAt\": null\r\n    },\r\n    {\r\n        \"bookingId\": 1,\r\n        \"pmsDocumentId\": \"9912\",\r\n        \"documentType\": \"scripts\",\r\n        \"documentName\": \"documentName Test 2\",\r\n        \"documentDescription\": \"documentDescription Test 2\",\r\n        \"documentFormat\": \"documentFormat Test 2\",\r\n        \"documentSize\": 2048,\r\n        \"createdAt\": \"2020-07-20 05:19:00\",\r\n        \"updatedAt\": null\r\n    },\r\n    {\r\n        \"bookingId\": 1,\r\n        \"pmsDocumentId\": \"9913\",\r\n        \"documentType\": \"scripts\",\r\n        \"documentName\": \"documentName Test 3\",\r\n        \"documentDescription\": \"documentDescription Test 3\",\r\n        \"documentFormat\": \"documentFormat Test 3\",\r\n        \"documentSize\": 2048,\r\n        \"createdAt\": \"2020-07-20 05:19:00\",\r\n        \"updatedAt\": null\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/documents/available",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"documents",
+						"available"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/documents/upload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookingId\": 1,\r\n    \"pmsDocumentId\": \"9911\",\r\n    \"documentType\": \"scripts\",\r\n    \"documentName\": \"documentName Test\",\r\n    \"documentDescription\": \"documentDescription Test\",\r\n    \"documentFormat\": \"documentFormat Test\",\r\n    \"documentSize\": 2048,\r\n    \"createdAt\": \"2020-07-20 05:18:00\",\r\n    \"updatedAt\": null,\r\n    \"documentContent\": \"SET_ME_BINARY_BASE64_ENCODED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/documents/upload",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"documents",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/documents/rejectUpload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "{{api-key}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-id",
+						"value": "{{practice-id}}",
+						"type": "text"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookingId\": 1,\r\n    \"pmsDocumentId\": \"9911\",\r\n    \"reason\": \"Test reason\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/documents/rejectUpload",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"documents",
+						"rejectUpload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/clientSnapshot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{api-key}}"
+					},
+					{
+						"key": "practice-id",
+						"type": "text",
+						"value": "{{practice-id}}"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\":\"2023-02-14\",\r\n    \"dateType\":\"appt_datetime\",\r\n    \"locations\": [\r\n        {\r\n            \"pmsLocationId\": \"loc1\",\r\n            \"pmsLocationName\": \"Default\",\r\n            \"pmsLocationStatus\": \"active\"\r\n        }\r\n    ],\r\n    \"practitioners\": [\r\n        {\r\n            \"pmsPractitionerId\": \"prac1\",\r\n            \"pmsPractitionerName\": \"Dr Greg House\",\r\n            \"pmsPractitionerStatus\": \"active\"\r\n        },\r\n        {\r\n            \"pmsPractitionerId\": \"prac2\",\r\n            \"pmsPractitionerName\": \"Dr Jane House\",\r\n            \"pmsPractitionerStatus\": \"active\"\r\n        }\r\n    ],\r\n    \"appointmentTypes\": [\r\n        {\r\n            \"pmsAppointmentTypeId\": \"at1\",\r\n            \"pmsAppointmentTypeName\": \"General Appointment\",\r\n            \"pmsAppointmentTypeStatus\": \"active\"\r\n        },\r\n        {\r\n            \"pmsAppointmentTypeId\": \"at2\",\r\n            \"pmsAppointmentTypeName\": \"Long Appointment\",\r\n            \"pmsAppointmentTypeStatus\": \"active\"\r\n        }\r\n    ],\r\n    \"appointments\": [\r\n        {\r\n            \"pmsAppointmentId\": \"a1\",\r\n            \"pmsPatientId\": \"pat1\",\r\n            \"pmsLocationId\": \"loc1\",\r\n            \"pmsPractitionerId\": \"prac1\",\r\n            \"pmsAppointmentTypeId\": \"at1\",\r\n            \"pmsAppointmentCreationTime\": \"2023-02-07 17:22:14\",\r\n            \"pmsAppointmentTime\": \"2023-02-14 09:30:00\",\r\n            \"pmsAppointmentLength\": 15,\r\n            \"pmsAppointmentStatus\": \"booked\"\r\n        },\r\n        {\r\n            \"pmsAppointmentId\": \"a2\",\r\n            \"pmsPatientId\": \"pat2\",\r\n            \"pmsLocationId\": \"loc1\",\r\n            \"pmsPractitionerId\": \"prac2\",\r\n            \"pmsAppointmentTypeId\": \"at2\",\r\n            \"pmsAppointmentCreationTime\": \"2023-02-07 17:48:32\",\r\n            \"pmsAppointmentTime\": \"2023-02-14 09:45:00\",\r\n            \"pmsAppointmentLength\": 30,\r\n            \"pmsAppointmentStatus\": \"cancelled\"\r\n        },\r\n        {\r\n            \"pmsAppointmentId\": \"a3\",\r\n            \"pmsPatientId\": \"pat2\",\r\n            \"pmsLocationId\": \"loc1\",\r\n            \"pmsPractitionerId\": \"prac2\",\r\n            \"pmsAppointmentTypeId\": \"at2\",\r\n            \"pmsAppointmentCreationTime\": \"2023-02-13 12:41:24\",\r\n            \"pmsAppointmentTime\": \"2023-02-14 17:45:00\",\r\n            \"pmsAppointmentLength\": 30,\r\n            \"pmsAppointmentStatus\": \"booked\"\r\n        }\r\n    ],\r\n    \"patients\": [\r\n        {\r\n            \"pmsPatientId\": \"pat1\",\r\n            \"pmsPatientFirstname\": \"John\",\r\n            \"pmsPatientLastname\": \"Doe\",\r\n            \"pmsPatientPhoneMobile\": \"0404040404\",\r\n            \"pmsPatientEmail\": \"john.doe@test.com\",\r\n            \"pmsPatientSmsConsent\": true,\r\n            \"pmsPatientAge16AndUnder\": false,\r\n            \"pmsPatientCreationTime\": \"2023-02-07 17:22:04\"\r\n        },\r\n        {\r\n            \"pmsPatientId\": \"pat2\",\r\n            \"pmsPatientFirstname\": \"Jackie\",\r\n            \"pmsPatientLastname\": \"Chan\",\r\n            \"pmsPatientPhoneMobile\": \"0405050505\",\r\n            \"pmsPatientEmail\": \"jackie.chan@test.com\",\r\n            \"pmsPatientSmsConsent\": true,\r\n            \"pmsPatientAge16AndUnder\": false,\r\n            \"pmsPatientCreationTime\": \"2023-02-07 17:48:09\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/clientSnapshot",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"clientSnapshot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/attachDocuments/{requestId}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{api-key}}"
+					},
+					{
+						"key": "practice-id",
+						"type": "text",
+						"value": "{{practice-id}}"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/attachDocuments/1",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"attachDocuments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/attachDocuments/{requestId}/confirmInsert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{api-key}}"
+					},
+					{
+						"key": "practice-id",
+						"type": "text",
+						"value": "{{practice-id}}"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pmsDocumentId\": \"1000\"\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/attachDocuments/1/confirmInsert",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"attachDocuments",
+						"1",
+						"confirmInsert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/attachDocuments/{requestId}/rejectInsert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"type": "text",
+						"value": "{{api-key}}"
+					},
+					{
+						"key": "practice-id",
+						"type": "text",
+						"value": "{{practice-id}}"
+					},
+					{
+						"key": "practice-key",
+						"value": "{{practice-key}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"reason\":\"Not supported\"\r\n}"
+				},
+				"url": {
+					"raw": "https://{{host}}/pms-api/v1/attachDocuments/1/rejectInsert",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"pms-api",
+						"v1",
+						"attachDocuments",
+						"1",
+						"rejectInsert"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "healthengine.com.au"
+		},
+		{
+			"key": "api-key",
+			"value": "SET_ME"
+		},
+		{
+			"key": "practice-id",
+			"value": "SET_ME"
+		},
+		{
+			"key": "practice-key",
+			"value": "SET_ME"
+		}
+	]
+}
