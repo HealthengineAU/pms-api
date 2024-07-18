@@ -24,6 +24,16 @@ It is highly advisable to regularly consult the [suggested testing document](sug
 
 As your development approaches completion, please carefully review the [go-live process section](#the-go-live-process) of this document for detailed steps on transitioning your integration from a test consumer to a production consumer, where it can interact with non-test Healthengine practices.
 
+## Identifying your application
+
+All outgoing requests should include your own custom *User-Agent* in the request header so we can easily identify requests coming from you.
+
+Ideally your *User-Agent* should be in the form: **APP_VENDOR_NAME** (**APP_VENDOR_EMAIL**) **APP_ENVIRONMENT**
+
+**APP_VENDOR_NAME** is the name of your application/PMS and your company.  
+**APP_VENDOR_EMAIL** is the best contact email address at your company for a person or team who can resolve technical issues.  
+**APP_ENVIRONMENT** is the environment you are calling from (e.g. *DEV*, *UAT*, *PROD*).
+
 ## Authentication and practice onboarding
 
 To access this API, authentication is required through an API key header associated with your PMS API consumer account. Additionally, individual consent must be obtained from each practice intending to use the integration.
