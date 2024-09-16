@@ -14,6 +14,11 @@ If you have any questions or require clarification regarding this document, plea
 
 ---
 
+## Australian Privacy Laws
+To comply with Australian Privacy Principles (or APPs), PMS API consumer processing and storage of data - whether through webhook subscription endpoints receiving data or integration workers retrieving data from our PMS API - must be done within a location in Australia. This ensures adherence to Chapter 8: APP 8 Cross-border disclosure of personal information (https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-8-app-8-cross-border-disclosure-of-personal-information). As Healthengine does not support cross-border data transfers, all data handling must occur within Australia to remain compliant with Australian Privacy Laws.
+
+---
+
 ## The development phase
 
 Throughout the development phase of your integration, we will configure your system as a test PMS API consumer within our infrastructure. Additionally, we will grant access to one or more test practices that have granted their consent to utilise your integration.
