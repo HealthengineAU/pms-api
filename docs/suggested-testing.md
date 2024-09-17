@@ -170,6 +170,27 @@ We strongly advise that you continue to periodically check the requests endpoint
 
 ---
 
+## Patient matching during booking related requests
+
+An attempt to match to an existing patient record in your PMS should occur for all incoming Healthengine booking requests.
+
+**Scenario: Attempting to match to existing patient**  
+**Given** the existence of a patient record in your PMS  
+**When** a booking request is retrieved from us for this patient  
+**Then** a patient match attempt should occur, to determine if the supplied patient is the existing patient record with a reasonable degree of accuracy
+
+**Scenario: Attempting to match to existing patient who has changed their details**  
+**Given** the existence of a patient record in your PMS with outdated details  
+**When** a booking request is retrieved from us for this patient, and they have since changed their home address, phone number, email address, or last name  
+**Then** the patient match attempt should be able to work out that this patient exists in the PMS with slightly different details
+
+**Scenario: Attempting to match to existing patient who has provided details in an unexpected format or with a spelling mistake**  
+**Given** the existence of a patient record in your PMS  
+**When** a booking request is retrieved from us for this patient who has provided their details in an unexpected format or with a spelling mistake  
+**Then** field normalisation should be attempted prior to comparison, and fuzzy matching of misspelt fields within an acceptable error margin should be done
+
+---
+
 ## Handling incoming booking related request edge cases
 
 Please consider these additional edge cases related to booking requests when refining your integration logic.

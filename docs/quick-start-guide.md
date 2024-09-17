@@ -14,6 +14,11 @@ If you have any questions or require clarification regarding this document, plea
 
 ---
 
+## Australian Privacy Laws
+To comply with Australian Privacy Principles (or APPs), PMS API consumer processing and storage of data - whether through webhook subscription endpoints receiving data or integration workers retrieving data from our PMS API - must be done within a location in Australia. This ensures adherence to Chapter 8: APP 8 Cross-border disclosure of personal information (https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-8-app-8-cross-border-disclosure-of-personal-information). As Healthengine does not support cross-border data transfers, all data handling must occur within Australia to remain compliant with Australian Privacy Laws.
+
+---
+
 ## The development phase
 
 Throughout the development phase of your integration, we will configure your system as a test PMS API consumer within our infrastructure. Additionally, we will grant access to one or more test practices that have granted their consent to utilise your integration.
@@ -271,7 +276,7 @@ https://support.healthengine.com.au/hc/en-us/articles/360027963671-Adding-Editin
 
 ---
 
-## Handling incoming requests
+## Retrieving incoming requests
 
 Once PMS resource availability has been published to the Healthengine, user interactions with the booking platform trigger the generation of requests, which can be retrieved through the requests endpoint.
 
@@ -468,6 +473,9 @@ POST https://healthengine.com.au/pms-api/v1/bookings/36127212/confirmInsert
 ```
 
 If you intend to reject the insertion, it's advisable to do so within 20 seconds of the request being generated. This prompt rejection will prompt the patient to rebook, offering them a more seamless experience.
+
+> :warning: **PLEASE NOTE**  
+When processing a booking request, you should attempt to match the supplied patient data with an existing patient in your PMS, whether the patient was created through a previous Healthengine booking request or existed prior to the integration. This helps prevent duplication of patient records. For more details, please refer to our [suggested testing document](suggested-testing.md) for the scenarios that should be covered.
 
 As for other request endpoints, you can find detailed documentation for them within the [API definition](../openapi.yaml) itself. It is highly recommended that you thoroughly explore this document for comprehensive information.
 
