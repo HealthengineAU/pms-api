@@ -2,11 +2,18 @@ openapi: 3.0.1
 
 info:
   title: Healthengine PMS API
-  description: An API to allow an external agent to publish information to Healthengine
+  description: |
+    An API to allow an external agent to publish information to Healthengine
     in order to allow booking of appointments.
+    
+    **Conventions:**
+    - All `POST` requests support gzip-compressed bodies using the `Content-Encoding: gzip` header.
+    - All datetimes/timestamps are expected in **YYYY-MM-DD HH24:MI:SS** format.
+    - All dates are expected in **YYYY-MM-DD** format.
+
   contact:
     email: integrations@healthengine.com.au
-  version: 1.8.0
+  version: 1.9.0
 
 servers:
 - url: https://healthengine.com.au/pms-api/v1
@@ -567,6 +574,65 @@ paths:
         '200':
           description: Successful
           content: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /availability/snapshots:
+    post:
+      tags:
+      - availability
+      summary: Upload availability snapshots
+      description: >
+        Upload availability snapshots for multiple resources/practitioners and/or days.
+        Send up to 100 availability snapshots in a single call.
+        Each snapshot is the same format as **/availability/snapshot**.
+        The normal workflow is to send availability snapshots as soon as availability changed into the PMS.
+      operationId: sendAvailabilitySnapshots
+      requestBody:
+        description: Array of availability snapshots. Each snapshot describes a resource/practitioner for a day
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AvailabilitySnapshot'
+        required: true
+      responses:
+        '200':
+          description: "Successful (with some availability snapshots potentially skipped on validation error, see: failed or errors in response body)"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  created:
+                    type: array
+                    description: List of snapshots created successfully (and queued to be handled ASAP)
+                    items:
+                      $ref: '#/components/schemas/SnapshotIdOrArrayIndex'
+                  existing:
+                    type: array
+                    description: List of snapshots that have already been sent recently and ignored because no change has been detected (same hash)
+                    items:
+                      $ref: '#/components/schemas/SnapshotIdOrArrayIndex'
+                  failed:
+                    type: array
+                    description: List of snapshots that failed validation. For more details about the reason of failure, see errors
+                    items:
+                      $ref: '#/components/schemas/SnapshotIdOrArrayIndex'
+                  errors:
+                    type: array
+                    description: List of errors about snapshots that failed (only set when there is at least one failure)
+                    items:
+                      type: object
+                      properties:
+                        snapshot:
+                          $ref: '#/components/schemas/SnapshotIdOrArrayIndex'
+                        error:
+                          type: string
+                          description: Error reason
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2014,6 +2080,9 @@ components:
         - availability
       type: object
       properties:
+        id:
+          type: string
+          description: Snapshot ID used for reference on error (optional)
         date:
           type: string
           format: date
@@ -2049,6 +2118,9 @@ components:
                 description: array of string ids of PMS appointment types applicable for this availability range
                 items:
                   type: string
+    SnapshotIdOrArrayIndex:
+      type: string
+      description: Snapshot ID when set (optional) or snapshot index in array input (starts at 0) otherwise
 
     # schemas: configuration
     PmsResource:
