@@ -129,7 +129,7 @@ POST https://healthengine.com.au/pms-api/v1/config/livenessContract
 
 PMS resources are the active, bookable entities related to the integrated PMS account or location within your software. Based on your design, a bookable entity might be a practitioner, nurse, or room.
 
-The snapshot endpoint is designed to upload all PMS resources associated with the integrated account or location. Any PMS resources that were previously transmitted but are now missing will be treated as deleted within the PMS.
+The snapshot endpoint is designed to upload all PMS resources associated with the integrated account or location at the same time. Any PMS resources that were previously transmitted but are now missing will be treated as deleted within the PMS.
 
 An example PMS resources snapshot POST follows.
 
@@ -147,6 +147,13 @@ POST https://healthengine.com.au/pms-api/v1/config/pmsResources/snapshot
     "pmsResourceName": "Doctor Do Good",
     "pmsPractitionerFirstname": "Do",
     "pmsPractitionerLastname": "Good",
+    "pmsPractitionerTitle": "Doctor"
+  },
+  {
+    "pmsResourceId": "12346",
+    "pmsResourceName": "Doctor John Doe",
+    "pmsPractitionerFirstname": "John",
+    "pmsPractitionerLastname": "Doe",
     "pmsPractitionerTitle": "Doctor"
   }
 ]
