@@ -274,9 +274,6 @@ POST https://healthengine.com.au/pms-api/v1/availability/snapshot
 }
 ```
 
-> :warning: **PLEASE NOTE**  
-If you send availability snapshots to us for a PMS resource that has not been linked to Healthengine practitioner, we will return a HTTP OK response but fail to convert the snapshot into Healthengine availability during subsequent processing.
-
 ---
 
 ## Retrieving incoming requests
