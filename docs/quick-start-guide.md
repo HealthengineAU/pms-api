@@ -192,7 +192,7 @@ POST https://healthengine.com.au/pms-api/v1/config/pmsAppointmentTypes/snapshot
 
 ## Linking PMS and Healthengine objects
 
-Once the practice configuration has been synced, a practice staff member or Healthengine support team member can link Healthengine and PMS objects via the  [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal.
+Once the practice configuration has been synced, a practice staff member or Healthengine support team member can link Healthengine and PMS objects via the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal.
 
 
 ### Creating Healthengine practitioners
