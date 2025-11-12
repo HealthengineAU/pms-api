@@ -203,7 +203,7 @@ The following article covers creating Healthengine practitioners in detail.
 
 https://support.healthengine.com.au/hc/en-us/articles/360034802811-Adding-Editing-and-Deleting-Practitioners
 
-Please note this section specifically  when adding a practitioner:
+Please note this section specifically when adding a practitioner:
 
 ![Linking a new practitioner to a PMS appointment book](../assets/quick-start-guide/add-practitioner.png)
 
