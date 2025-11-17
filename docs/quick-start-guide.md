@@ -195,11 +195,49 @@ POST https://healthengine.com.au/pms-api/v1/config/pmsAppointmentTypes/snapshot
 ]
 ```
 
+---
+
+## Linking PMS and Healthengine objects
+
+Once the practice configuration has been synced, a practice staff member or Healthengine support team member can link Healthengine and PMS objects via the [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal.
+
+
+### Creating Healthengine practitioners
+
+A Healthengine practitioner must be created for each of the PMS resources supplied in the practice configuration step in order for the PMS resource to be bookable on the Healthengine platform.
+
+The following article covers creating Healthengine practitioners in detail.
+
+https://support.healthengine.com.au/hc/en-us/articles/360034802811-Adding-Editing-and-Deleting-Practitioners
+
+Please note this section specifically when adding a practitioner:
+
+![Linking a new practitioner to a PMS appointment book](../assets/quick-start-guide/add-practitioner.png)
+
+A test AHPRA number of 'ABC1234567890' is available for test PMS API consumers (only).
+
+Your supplied PMS resources from the 'syncing practice configuration' section should appear in the 'appointment book' dropdown field.
+
+### Creating Healthengine appointment types
+
+Once a Healthengine practitioner has been created, you have the option to edit their appointment types and introduce new ones.
+
+![Selecting edit appointment types for a practitioner](../assets/quick-start-guide/edit-appointment-types.png)
+
+Your supplied PMS appointment types from the 'syncing practice configuration' section should appear in the 'Linked PMS Appointment' dropdown field for each practitioner appointment type.
+
+![Selecting edit appointment types for a practitioner](../assets/quick-start-guide/link-appointment-type.png)
+
+
+The following article covers creating Healthengine appointment types for a practitioner in detail.
+
+https://support.healthengine.com.au/hc/en-us/articles/360027963671-Adding-Editing-and-Removing-Appointment-Types
+
+---
+
 ## Syncing PMS resource appointment availability
 
-Once the practice configuration has been synchronised, you can commence the process of synchronising appointment availability for each PMS resource.
-
-Although you have the option to initiate this process before completing the practice configuration by linking Healthengine and PMS objects (as outlined in the next section), please note that the Healthengine platform will not publish any appointments until this synchronisation is finalised.
+Once the practice configuration has been synchronised and you have linked your resources and appointment types to Healthengine objects, you can commence the process of synchronising appointment availability for each PMS resource.
 
 Each snapshot you send to us should provide details about the availability of a specific PMS resource for a particular date within the practice's timezone.
 
@@ -242,44 +280,6 @@ POST https://healthengine.com.au/pms-api/v1/availability/snapshot
   ]
 }
 ```
-
----
-
-## Linking PMS and Healthengine objects
-
-Once the practice configuration has been synced, a practice staff member or Healthengine support team member can link Healthengine and PMS objects via the  [Healthengine Practice Admin](https://healthengine.com.au/appointment/admin) portal.
-
-
-### Creating Healthengine practitioners
-
-A Healthengine practitioner must be created for each of the PMS resources supplied in the practice configuration step in order for the PMS resource to be bookable on the Healthengine platform.
-
-The following article covers creating Healthengine practitioners in detail.
-
-https://support.healthengine.com.au/hc/en-us/articles/360034802811-Adding-Editing-and-Deleting-Practitioners
-
-Please note this section specifically  when adding a practitioner:
-
-![Linking a new practitioner to a PMS appointment book](../assets/quick-start-guide/add-practitioner.png)
-
-A test AHPRA number of 'ABC1234567890' is available for test PMS API consumers (only).
-
-Your supplied PMS resources from the 'syncing practice configuration' section should appear in the 'appointment book' dropdown field.
-
-### Creating Healthengine appointment types
-
-Once a Healthengine practitioner has been created, you have the option to edit their appointment types and introduce new ones.
-
-![Selecting edit appointment types for a practitioner](../assets/quick-start-guide/edit-appointment-types.png)
-
-Your supplied PMS appointment types from the 'syncing practice configuration' section should appear in the 'Linked PMS Appointment' dropdown field for each practitioner appointment type.
-
-![Selecting edit appointment types for a practitioner](../assets/quick-start-guide/link-appointment-type.png)
-
-
-The following article covers creating Healthengine appointment types for a practitioner in detail.
-
-https://support.healthengine.com.au/hc/en-us/articles/360027963671-Adding-Editing-and-Removing-Appointment-Types
 
 ---
 
