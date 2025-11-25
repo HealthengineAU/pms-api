@@ -2111,8 +2111,8 @@ components:
                 format: int64
                 description: >
                   Slot length in seconds.
-                  If this value is > 0 then it will be used when publishing availability.
-                  If this value == 0 then the Healthengine configured appointment length will be used.
+                  If this value is >= 60 then it will be used when publishing availability.
+                  If this value < 60 then the Healthengine configured appointment length will be used.
               pmsAppointmentTypeIds:
                 type: array
                 description: array of string ids of PMS appointment types applicable for this availability range
