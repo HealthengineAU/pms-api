@@ -270,12 +270,12 @@ POST https://healthengine.com.au/pms-api/v1/availability/snapshot
     {
       "start": "09:00",
       "end": "12:00",
-      "slotLength": "1800"
+      "slotLength": 1800
     },
     {
       "start": "13:00",
       "end": "17:00",
-      "slotLength": "1800"
+      "slotLength": 1800
     },
   ]
 }
