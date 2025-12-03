@@ -697,7 +697,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-10-01\",\r\n    \"pmsResourceId\": \"12345\",\r\n    \"availability\": [\r\n        {\r\n            \"start\": \"09:00\",\r\n            \"end\": \"12:00\",\r\n            \"slotLength\": \"30\"\r\n        },\r\n        {\r\n            \"start\": \"13:00\",\r\n            \"end\": \"17:00\",\r\n            \"slotLength\": \"60\",\r\n            \"pmsAppointmentTypeIds\":[\"G1236:12345\"]\r\n        }\r\n  ]\r\n}"
+					"raw": "{\r\n    \"date\": \"2023-10-01\",\r\n    \"pmsResourceId\": \"12345\",\r\n    \"availability\": [\r\n        {\r\n            \"start\": \"09:00\",\r\n            \"end\": \"12:00\",\r\n            \"slotLength\": 900\r\n        },\r\n        {\r\n            \"start\": \"13:00\",\r\n            \"end\": \"17:00\",\r\n            \"slotLength\": 1800,\r\n            \"pmsAppointmentTypeIds\":[\"G1236:12345\"]\r\n        }\r\n  ]\r\n}"
 				},
 				"url": {
 					"raw": "https://{{host}}/pms-api/v1/availability/snapshot",
