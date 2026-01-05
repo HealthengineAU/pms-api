@@ -17,9 +17,12 @@ Additionally, the [suggested testing document](docs/suggested-testing.md) outlin
 
 If have any questions related to this documentation, please reach out to integrations@healthengine.com.au
 
-## Whitelist IPs
+# IP Allowlist
+To enhance the security of your integration, we recommend restricting incoming traffic on your endpoints (such as webhooks) to only accept requests from Healthengine.
 
-Healthengine requests such as webhooks will come from the following IP addresses:
+By filtering by source IP, you ensure that any request sent to your server genuinely originates from our system, preventing "spoofing" or unauthorized access attempts.
+
+All requests from Healthengine will originate from the following IPs:
 
 - 13.55.48.1
 - 52.62.53.70
