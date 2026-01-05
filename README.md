@@ -16,3 +16,11 @@ For convenience, this [Postman Collection](postman_collection.json) is also prov
 Additionally, the [suggested testing document](docs/suggested-testing.md) outlines common and edge use cases that your integration should be designed to accommodate throughout the development process. Failing to provide solutions to these tests could result in your integration not being approved for deployment.
 
 If have any questions related to this documentation, please reach out to integrations@healthengine.com.au
+
+## Whitelist IPs
+
+Healthengine requests such as webhooks will come from the following IP addresses:
+
+- 13.55.48.1
+- 52.62.53.70
+- 13.54.122.64
