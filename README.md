@@ -16,3 +16,14 @@ For convenience, this [Postman Collection](postman_collection.json) is also prov
 Additionally, the [suggested testing document](docs/suggested-testing.md) outlines common and edge use cases that your integration should be designed to accommodate throughout the development process. Failing to provide solutions to these tests could result in your integration not being approved for deployment.
 
 If have any questions related to this documentation, please reach out to integrations@healthengine.com.au
+
+# IP Allowlist
+To enhance the security of your integration, we recommend restricting incoming traffic on your endpoints (such as webhooks) to only accept requests from Healthengine.
+
+By filtering by source IP, you ensure that any request sent to your server genuinely originates from our system, preventing "spoofing" or unauthorized access attempts.
+
+All requests from Healthengine will originate from the following IPs:
+
+- 13.55.48.1
+- 52.62.53.70
+- 13.54.122.64
