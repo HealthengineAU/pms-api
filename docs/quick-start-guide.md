@@ -69,7 +69,7 @@ This configuration data should be transmitted when:
 1. a Healthengine practice ID is associated with a PMS account or location
 2. the integration was disabled in your software via configuration and has now been enabled
 3. a user opts to resync their practice configuration via a dedicated action in your software
-3. whenever there are updates to the corresponding data within your software while the integration is enabled
+4. whenever there are updates to the corresponding data within your software while the integration is enabled
 
 ### The liveness contract
 
@@ -276,7 +276,7 @@ POST https://healthengine.com.au/pms-api/v1/availability/snapshot
       "start": "13:00",
       "end": "17:00",
       "slotLength": 1800
-    },
+    }
   ]
 }
 ```
@@ -378,7 +378,7 @@ To simplify the troubleshooting process, we offer an endpoint that allows you to
 An example subscription error log GET follows.
 
 ```
-GET https://heweb.dev.he0.io/pms-api/v1/subscriptionErrorLog?subscriptionId=db26bebd-63f3-47d6-9fb8-09b4edc38aa7&from=2020-10-12+09%3A
+GET https://healthengine.com.au/pms-api/v1/subscriptionErrorLog?subscriptionId=db26bebd-63f3-47d6-9fb8-09b4edc38aa7&from=2020-10-12+09%3A
  api-key: eyJ0e...
  practice-id: 1234567
  practice-key: t1qKf...
