@@ -13,7 +13,7 @@ info:
 
   contact:
     email: integrations@healthengine.com.au
-  version: 1.9.0
+  version: 1.9.1
 
 servers:
 - url: https://healthengine.com.au/pms-api/v1
@@ -2025,14 +2025,19 @@ components:
           type: string
         email:
           type: string
+          description: Empty string if not provided (e.g. email not requested by the booking form)
         address:
           type: string
+          description: Empty string if not provided (e.g. address not requested by the booking form)
         suburb:
           type: string
+          description: Empty string if not provided (e.g. address not requested by the booking form)
         state:
           type: string
+          description: Empty string if not provided (e.g. address not requested by the booking form)
         postcode:
           type: string
+          description: Empty string if not provided (e.g. address not requested by the booking form)
         gender:
           type: string
           enum:
